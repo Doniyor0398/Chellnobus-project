@@ -1,0 +1,33 @@
+{
+    "extends": [
+      "airbnb",
+      "airbnb-typescript",
+      "airbnb-base",
+      "plugin:react/recommended",
+      "plugin:jsx-a11y/recommended",
+      "prettier"
+    ],
+    "plugins": [
+      "react",
+      "jsx-a11y",
+      "import",
+      "react-hooks",
+      "@typescript-eslint",
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+      "@typescript-eslint/no-unused-vars": "off",
+      "import/prefer-default-export": "off",
+      "react/prop-types": "off",
+      "prettier/prettier": "error",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
+  }
+  
