@@ -1,10 +1,10 @@
-import React from 'react';
+import LoginForm from '../components/LoginForm/LoginForm';
 
 function App() {
   return (
-    <>
-      <div>Lorem, ipsum dolor.</div>
-    </>
+    <div>
+      <LoginForm />
+    </div>
   );
 }
 
