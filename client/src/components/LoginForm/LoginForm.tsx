@@ -1,79 +1,50 @@
-import React, { useState } from 'react';
-import { FormState } from '../../types/FormTypes';
+import React from 'react';
+import { useLoginForm } from '../../hooks/useLoginForm';
+import styles from './LoginForm.module.scss';
 
 const LoginForm: React.FC = () => {
-  const [formState, setFormState] = useState<FormState>({
-    userName: '',
-    password: '',
-    error: '',
-  });
-
-  // обработка данные user
-  const handleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-
-    if (formState.userName === '' || formState.password === '') {
-      setFormState((prevState) => ({
-        ...prevState,
-        error: 'Тебе хана',
-      }));
-      return;
-    }
-
-    console.log('Form submitted', {
-      userName: formState.userName,
-      password: formState.password,
-    });
-  };
-
-  const handleuserNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setFormState((prevState) => ({
-      ...prevState,
-      userName: e.target.value,
-    }));
-  };
-
-  const handlePasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setFormState((prevState) => ({
-      ...prevState,
-      password: e.target.value,
-    }));
-  };
+  const {
+    formState,
+    handleSubmit,
+    handleUserNameChange,
+    handlePasswordChange,
+  } = useLoginForm();
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="userName">Ваша имя: </label>
+    <div className={styles['login-form']}>
+      <form className={styles['login-form__form']} onSubmit={handleSubmit}>
+        <div className={styles['login-form__label']}>
+          <label htmlFor="user-name">Ваше имя:</label>
           <input
+            className={styles['login-form__input']}
             type="text"
-            id="userName"
-            value={formState.userName}
-            onChange={handleuserNameChange}
-            style={{
-              border:
-                formState.error && formState.userName === ''
-                  ? '2px solid red'
-                  : '1px solid green',
-            }}
+            id="user-name"
+            value={formState.username}
+            onChange={handleUserNameChange}
           />
         </div>
-        <label htmlFor="password">Пароль: </label>
-        <input
-          type="password"
-          value={formState.password}
-          onChange={handlePasswordChange}
-        />
-        <div>
-          <button type="submit">Войти</button>
+
+        <div className={styles['login-form__label']}>
+          <label htmlFor="password">Пароль:</label>
+          <input
+            className={styles['login-form__input']}
+            type="password"
+            id="password"
+            value={formState.password}
+            onChange={handlePasswordChange}
+          />
         </div>
-        {formState.error && <p>{formState.error}</p>}
+
+        <button className={styles['login-form__button']} type="submit">
+          Войти
+        </button>
+
+        {formState.error && (
+          <div className={styles['login-form__error']}>{formState.error}</div>
+        )}
       </form>
     </div>
   );
 };
+
 export default LoginForm;

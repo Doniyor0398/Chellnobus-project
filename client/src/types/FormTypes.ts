@@ -1,5 +1,5 @@
 export interface FormState {
-  userName: string;
+  username: string;
   password: string;
   error: string;
 }
