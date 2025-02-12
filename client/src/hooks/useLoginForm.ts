@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FormState } from '../types/FormTypes';
+// import axios from 'axios';
 
 export const useLoginForm = () => {
   const [formState, setFormState] = useState<FormState>({
@@ -16,10 +17,12 @@ export const useLoginForm = () => {
         ...prevState,
         error:
           formState.username === ''
-            ? 'Заполни имя'
+            ? 'Заполните имя'
             : formState.password === ''
-              ? 'Заполни пароль'
-              : '',
+              ? 'Заполните пароль'
+              : formState.password.length < 6
+                ? 'Длина пароля должна быть 6 символов'
+                : '',
       }));
 
       return;
@@ -29,6 +32,7 @@ export const useLoginForm = () => {
       userName: formState.username,
 
       password: formState.password,
+      package: formState.password.length,
     });
   };
 
