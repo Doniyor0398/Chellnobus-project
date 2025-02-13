@@ -1,0 +1,46 @@
+.button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--primary {
+    background: #4e6bfe;
+    color: #fff;
+
+    &:hover {
+      background: #697ff0;
+    }
+
+    &:active {
+      background: #002aff;
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    border: 1px solid #bbb;
+    color: #fff;
+
+    &:hover {
+      background: #697ff0;
+    }
+
+    &:active {
+      background: #002aff;
+    }
+  }
+}

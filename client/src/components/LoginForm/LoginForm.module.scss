@@ -22,7 +22,8 @@
     align-items: center;
     color: #4e6bfe;
     border-bottom: 1px solid #4e6bfe;
-    margin: 10px 0 40px 0;
+    margin: 10px 0 40px;
+
     img {
       width: 50px;
       height: 50px;
@@ -37,56 +38,12 @@
     font-weight: 500;
     color: #bbb;
   }
-
-  &__input {
-    padding: 10px;
-    border: 1px solid #525252;
-    border-radius: 8px;
-    font-size: 16px;
-    color: #fff;
-    background: #333;
-    transition:
-      border-color 0.3s,
-      background 0.3s;
-
-    &:focus {
-      border-color: #4e6bfe;
-      outline: none;
-    }
-  }
-
   &__input-password {
     margin: 10px 0;
   }
-
-  &__button {
-    padding: 12px;
-    background: #4e6bfe;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition:
-      background 0.3s,
-      transform 0.2s;
-
-    &:hover {
-      background: #697ff0;
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      background: #002aff;
-      transform: translateY(0);
-    }
-  }
-
   &__error {
     margin-top: 10px;
     color: #f44336;
     font-size: 14px;
-    text-align: center;
   }
 }
