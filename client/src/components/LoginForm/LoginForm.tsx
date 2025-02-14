@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormState } from '../../types/FormTypes';
-import iconAuth from '../../assets/icon/bus.svg';
 import styles from './LoginForm.module.scss';
 import { Button } from '../../ui/Button/Button';
 import { Input } from '../../ui/Input/Input';
@@ -41,10 +40,7 @@ const LoginForm: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className={styles['login-form__form']}
       >
-        <h1 className={styles['login-form__title']}>
-          <img src={iconAuth} alt="icon" />
-          Chellnobus
-        </h1>
+        <h1 className={styles['login-form__title']}>Chellnobus</h1>
 
         <div className={styles['login-form__label']}>
           <Input
