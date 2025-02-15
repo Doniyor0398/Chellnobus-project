@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HtmlHTMLAttributes } from 'react';
 import clsx from 'clsx';
 import styles from './Input.module.scss';
 
@@ -7,15 +7,16 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-export const Input: React.FC<InputProps> = ({
-  variant = 'primary',
-  className,
-  ...props
-}) => {
-  return (
-    <input
-      className={clsx(styles.input, styles[`input--${variant}`], className)}
-      {...props}
-    />
-  );
-};
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ variant = 'primart', className, ...props }, ref) => {
+    return (
+      <input
+        className={clsx(styles.input, styles[`variant--${variant}`], className)}
+        {...props}
+        ref={ref}
+      />
+    );
+  },
+);
+
+export default Input;

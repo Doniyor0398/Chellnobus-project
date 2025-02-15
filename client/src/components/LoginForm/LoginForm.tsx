@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormState } from '../../types/FormTypes';
 import styles from './LoginForm.module.scss';
 import { Button } from '../../ui/Button/Button';
-import { Input } from '../../ui/Input/Input';
+import Input from '../../ui/Input/Input';
 
 const LoginForm: React.FC = () => {
   const {
@@ -44,6 +44,7 @@ const LoginForm: React.FC = () => {
 
         <div className={styles['login-form__label']}>
           <Input
+            variant="primary"
             placeholder="Имя пользователя"
             className={styles['login-form__input']}
             {...register('username', {
@@ -77,11 +78,7 @@ const LoginForm: React.FC = () => {
           )}
         </div>
 
-        <Button
-          type="submit"
-          variant="primary"
-          className={styles['login-form__button']}
-        >
+        <Button type="submit" className={styles['login-form__button']}>
           Войти
         </Button>
       </form>
