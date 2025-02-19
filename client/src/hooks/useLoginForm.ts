@@ -42,6 +42,8 @@ export const useLoginForm = () => {
       } else {
         setServerError('Произошла ошибка при авторизации. Попробуйте снова.');
       }
+    } finally {
+      reset();
     }
   };
 
