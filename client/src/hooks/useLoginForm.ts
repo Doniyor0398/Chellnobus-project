@@ -46,7 +46,6 @@ export const useLoginForm = () => {
       reset();
     }
   };
-
   return {
     register,
     handleSubmit,

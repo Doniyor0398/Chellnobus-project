@@ -16,6 +16,7 @@ const LoginForm: React.FC = () => {
   const {
     register,
     handleSubmit,
+    loading,
     errors,
     onSubmit,
     showPassword,
@@ -78,6 +79,8 @@ const LoginForm: React.FC = () => {
           {serverError && (
             <span className={styles['login-form__error']}>{serverError}</span>
           )}
+
+          {loading && <p>Загрузка...</p>}
         </div>
 
         <Button
