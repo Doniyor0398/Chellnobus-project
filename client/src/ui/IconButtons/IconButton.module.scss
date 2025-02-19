@@ -1,0 +1,9 @@
+.iconButton {
+  width: 24px; // Размер иконки
+  height: 24px;
+  transition: opacity 0.5s ease; // Плавное изменение прозрачности
+
+  &:hover {
+    opacity: 0.8; // Эффект при наведении
+  }
+}

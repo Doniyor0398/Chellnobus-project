@@ -1,38 +1,27 @@
 import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { FormState } from '../../types/FormTypes';
-import styles from './LoginForm.module.scss';
-import { Button } from '../../ui/Button/Button';
+
+import { useLoginForm } from '../../hooks/useLoginForm';
+
+import Button from '../../ui/Button/Button';
+import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
+
+import IconUser from '../../assets/icon/user.svg';
+import noHidden from '../../assets/icon/no-hidden.svg';
+import hidden from '../../assets/icon/hidden.svg';
+
+import styles from './LoginForm.module.scss';
 
 const LoginForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormState>();
-
-  const onSubmit: SubmitHandler<FormState> = async (data) => {
-    console.log('Form Data:', data);
-
-    try {
-      /*
-      const response = await axios.post('', {
-        username: data.username,
-        password: data.password,
-      });
-
-      console.log('API Response:', response.data);
-
-      if (response.data.token) {
-        localStorage.setItem('authToken', response.data.token);
-        window.location.href = '/dashboard';
-      }
-      */
-    } catch (error) {
-      console.error('API Error:', error);
-    }
-  };
+    errors,
+    onSubmit,
+    showPassword,
+    togglePasswordVisibility,
+    serverError,
+  } = useLoginForm();
 
   return (
     <div className={styles['login-form']}>
@@ -40,17 +29,18 @@ const LoginForm: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className={styles['login-form__form']}
       >
-        <h1 className={styles['login-form__title']}>Chellnobus</h1>
+        <div className={styles['login-form__title']}>Вход</div>
 
         <div className={styles['login-form__label']}>
           <Input
-            variant="primary"
-            placeholder="Имя пользователя"
+            placeholder="Имя пользователя*"
             className={styles['login-form__input']}
             {...register('username', {
               required: 'Имя пользователя обязательно',
             })}
+            icon={<img src={IconUser} alt="User Icon" />}
           />
+
           {errors.username && (
             <span className={styles['login-form__error']}>
               {errors.username.message}
@@ -60,8 +50,8 @@ const LoginForm: React.FC = () => {
 
         <div className={styles['login-form__label']}>
           <Input
-            placeholder="Пароль"
-            type="password"
+            placeholder="Пароль*"
+            type={showPassword ? 'text' : 'password'}
             className={`${styles['login-form__input']} ${styles['login-form__input-password']}`}
             {...register('password', {
               required: 'Требуется пароль',
@@ -70,15 +60,31 @@ const LoginForm: React.FC = () => {
                 message: 'Пароль должен быть длиной не менее 6 символов.',
               },
             })}
+            icon={
+              <IconButton
+                src={showPassword ? noHidden : hidden}
+                alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                onClick={togglePasswordVisibility}
+              />
+            }
           />
+
           {errors.password && (
             <span className={styles['login-form__error']}>
               {errors.password.message}
             </span>
           )}
+
+          {serverError && (
+            <span className={styles['login-form__error']}>{serverError}</span>
+          )}
         </div>
 
-        <Button type="submit" className={styles['login-form__button']}>
+        <Button
+          type="submit"
+          variant="primary"
+          className={styles['login-form__button']}
+        >
           Войти
         </Button>
       </form>

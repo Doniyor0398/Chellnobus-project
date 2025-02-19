@@ -1,13 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
+
+import { ButtonProps } from '../../types/ButtonTypes';
 import styles from './Button.module.scss';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
-  className?: string;
-}
-
-export const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   className,
   children,
@@ -22,3 +19,5 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+
+export default Button;

@@ -1,20 +1,16 @@
-import React, { HtmlHTMLAttributes } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import styles from './Input.module.scss';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  variant?: 'primary' | 'secondary';
-  className?: string;
-}
+import styles from './Input.module.scss';
+import { InputProps } from '../../types/InputTypes';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ variant = 'primart', className, ...props }, ref) => {
+  ({ className, icon, ...props }, ref) => {
     return (
-      <input
-        className={clsx(styles.input, styles[`variant--${variant}`], className)}
-        {...props}
-        ref={ref}
-      />
+      <div className={clsx(styles.inputWrapper)}>
+        <input className={clsx(styles.input, className)} {...props} ref={ref} />
+        {icon && <span className={styles.icon}>{icon}</span>}
+      </div>
     );
   },
 );

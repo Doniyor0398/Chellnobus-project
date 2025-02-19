@@ -1,6 +1,14 @@
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .input {
-  padding: 10px;
-  border: 1px solid #525252;
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #8c8c8c;
   border-radius: 8px;
   font-size: 16px;
   color: #fff;
@@ -9,8 +17,23 @@
     border-color 0.3s,
     background 0.3s;
 
+  &::placeholder {
+    color: #8c8c8c;
+  }
   &:focus {
     border-color: #4e6bfe;
     outline: none;
   }
+}
+
+.icon {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: 24px;
+  max-height: 24px;
+  z-index: 10;
 }

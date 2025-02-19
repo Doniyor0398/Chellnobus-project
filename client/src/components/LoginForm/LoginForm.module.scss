@@ -4,44 +4,30 @@
   align-items: center;
   height: 100vh;
   width: 100%;
+  background: #1e1e1e;
   padding: 10px;
-  background: url(../../assets/icon/auth.jpg) center no-repeat;
-  background-size: cover;
-  position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1;
-  }
   &__form {
-    position: relative;
-    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.3);
+    background: #2c2c2c;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     max-width: 500px;
-    height: 350px;
     width: 100%;
-    padding: 20px;
+    padding: 30px;
   }
 
   &__title {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #4e6bfe;
-    border-bottom: 1px solid #4e6bfe;
-    margin: 10px 0 40px;
-    padding: 0 0 20px 0;
+    padding: 0 0 30px 0;
+
+    color: #ffff;
+    font-size: 30px;
+    font-weight: 600;
 
     img {
       max-width: 86px;
