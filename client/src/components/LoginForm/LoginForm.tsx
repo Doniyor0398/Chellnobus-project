@@ -6,7 +6,7 @@ import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
 
-import IconUser from '../../assets/icon/user.svg';
+import IconUser from '../../assets/icon/mail.svg'; // Возможно, здесь стоит поменять иконку на иконку почты
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
 
@@ -34,17 +34,23 @@ const LoginForm: React.FC = () => {
 
         <div className={styles['login-form__label']}>
           <Input
-            placeholder="Имя пользователя*"
+            type="email"
+            placeholder="Email*"
             className={styles['login-form__input']}
-            {...register('username', {
-              required: 'Имя пользователя обязательно',
+            {...register('email', {
+              setValueAs: (value) => value.trim(),
+              required: 'Email обязателен',
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: 'Неверный формат email',
+              },
             })}
-            icon={<img src={IconUser} alt="User Icon" />}
+            icon={<img src={IconUser} alt="Email Icon" />}
           />
 
-          {errors.username && (
+          {errors.email && (
             <span className={styles['login-form__error']}>
-              {errors.username.message}
+              {errors.email.message}
             </span>
           )}
         </div>
@@ -58,7 +64,11 @@ const LoginForm: React.FC = () => {
               required: 'Требуется пароль',
               minLength: {
                 value: 6,
-                message: 'Пароль должен быть длиной не менее 6 символов.',
+                message: 'Пароль должен содержать минимум 6 символов.',
+              },
+              maxLength: {
+                value: 20,
+                message: 'Пароль не должен превышать 20 символов.',
               },
             })}
             icon={

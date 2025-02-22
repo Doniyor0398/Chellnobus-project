@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+
 import axios from 'axios';
 
 interface AuthState {
@@ -15,12 +16,12 @@ const initialState: AuthState = {
 
 export const loginUser = createAsyncThunk<
   string,
-  { username: string; password: string },
+  { email: string; password: string },
   { rejectValue: string }
->('auth/loginUser', async ({ username, password }, { rejectWithValue }) => {
+>('auth/loginUser', async ({ email, password }, { rejectWithValue }) => {
   try {
     const response = await axios.post('#', {
-      username,
+      email,
       password,
     });
     return response.data.token;
@@ -60,14 +61,3 @@ const authSlice = createSlice({
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
-
-import { useState, useCallback } from 'react';
-
-export const useToggle = (initialState = false): [boolean, () => void] => {
-  const [state, setState] = useState(initialState);
-
-  const toggle = useCallback(() => {
-    setState((prev) => !prev);
-  }, []);
-  return [state, toggle];
-};
