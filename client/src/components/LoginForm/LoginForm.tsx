@@ -41,7 +41,8 @@ const LoginForm: React.FC = () => {
               setValueAs: (value) => value.trim(),
               required: 'Email обязателен',
               pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                value:
+                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|co\.uk|ru|ua|etc)$/i,
                 message: 'Неверный формат email',
               },
             })}

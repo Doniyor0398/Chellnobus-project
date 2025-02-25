@@ -1,11 +1,11 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { LoginFormTypes } from '../types/LoginFormTypes';
 import { useAppDispatch } from './useAppDispatch';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/slices/store';
 import { useToggle } from './useToggle';
 import { loginUser } from '../Redux/slices/authSlice';
+import { useState } from 'react';
 
 export const useLoginForm = () => {
   const {
@@ -15,9 +15,9 @@ export const useLoginForm = () => {
     reset,
   } = useForm<LoginFormTypes>();
   const dispatch = useAppDispatch();
-  const [serverError, setServerError] = useState<string | null>(null);
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const [showPassword, togglePasswordVisibility] = useToggle(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const onSubmit: SubmitHandler<LoginFormTypes> = async (data) => {
     console.log(data);
@@ -28,29 +28,29 @@ export const useLoginForm = () => {
       if (response) {
         localStorage.setItem('authToken', response);
         console.log('Токен сохранен', response);
+
+        setServerError(null);
       }
     } catch (err: any) {
-      console.error('Ошибка при логина');
+      console.error('Ошибка при логине');
 
       if (err === 'Ошибка авторизации') {
         setServerError('Неверный логин или пароль');
       } else {
         setServerError('Произошла ошибка при авторизации. Попробуйте снова');
       }
-    } finally {
-      reset();
     }
   };
 
   return {
     register,
     handleSubmit,
-    errors,
     error,
-    showPassword,
-    togglePasswordVisibility,
+    errors,
     loading,
+    showPassword,
     serverError,
+    togglePasswordVisibility,
     onSubmit,
   };
 };
