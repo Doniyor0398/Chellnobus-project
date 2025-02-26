@@ -37,6 +37,7 @@ const RegisterForm: React.FC = () => {
             placeholder="Имя*"
             className={styles['register-form__input']}
             {...register('name', {
+              setValueAs: (value) => value.trim(),
               required: 'Имя обязательно',
               minLength: {
                 value: 2,
