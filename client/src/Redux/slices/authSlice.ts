@@ -19,10 +19,7 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >('auth/loginUser', async ({ email, password }, { rejectWithValue }) => {
   try {
-    const response = await axios.post('#', {
-      email,
-      password,
-    });
+    const response = await axios.post('#', { email, password });
     return response.data.token;
   } catch (error: any) {
     return rejectWithValue(
@@ -37,7 +34,6 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.token = null;
-
       if (typeof window !== 'undefined') {
         localStorage.removeItem('authToken');
       }
@@ -59,7 +55,7 @@ const authSlice = createSlice({
         state.error =
           typeof action.payload === 'string'
             ? action.payload
-            : 'Неизветсная ошибка';
+            : 'Неизвестная ошибка';
       });
   },
 });

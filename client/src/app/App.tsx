@@ -1,12 +1,10 @@
-import LoginForm from '../components/LoginForm/LoginForm';
-import '../styles/reset.scss';
+import React from 'react';
+import AppRouter from '../router/AppRouter';
 
-function App() {
-  return (
-    <div>
-      <LoginForm />
-    </div>
-  );
-}
+const App: React.FC = () => (
+  <div>
+    <AppRouter />
+  </div>
+);
 
 export default App;

@@ -6,11 +6,12 @@ import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
 
-import IconUser from '../../assets/icon/mail.svg'; // Возможно, здесь стоит поменять иконку на иконку почты
+import IconUser from '../../assets/icon/mail.svg';
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
 
 import styles from './LoginForm.module.scss';
+import { Link } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
   const {
@@ -44,6 +45,10 @@ const LoginForm: React.FC = () => {
                 value:
                   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|co\.uk|ru|ua|etc)$/i,
                 message: 'Неверный формат email',
+              },
+              maxLength: {
+                value: 50,
+                message: 'E-mail не должен превышать 50 символов.',
               },
             })}
             icon={<img src={IconUser} alt="Email Icon" />}
@@ -101,6 +106,16 @@ const LoginForm: React.FC = () => {
         >
           Войти
         </Button>
+
+        <div className={styles['login-form__register-link']}>
+          Нет аккаунта?
+          <Link
+            to="/register"
+            className={styles['login-form__register-link__text']}
+          >
+            Зарегистрироваться
+          </Link>
+        </div>
       </form>
     </div>
   );
