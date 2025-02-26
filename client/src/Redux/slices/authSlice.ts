@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-
 import axios from 'axios';
 
 interface AuthState {
@@ -38,7 +37,10 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.token = null;
-      localStorage.removeItem('authToken');
+
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
     },
   },
   extraReducers: (builder) => {
@@ -54,7 +56,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Неизвестная ошибка';
+        state.error =
+          typeof action.payload === 'string'
+            ? action.payload
+            : 'Неизветсная ошибка';
       });
   },
 });
