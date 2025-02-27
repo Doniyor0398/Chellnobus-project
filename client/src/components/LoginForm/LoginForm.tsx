@@ -36,7 +36,7 @@ const LoginForm: React.FC = () => {
         <div className={styles['login-form__label']}>
           <Input
             type="email"
-            placeholder="Email*"
+            placeholder="Эл.почта*"
             className={styles['login-form__input']}
             {...register('email', {
               setValueAs: (value) => value.trim(),

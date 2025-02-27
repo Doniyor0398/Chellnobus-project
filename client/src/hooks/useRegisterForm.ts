@@ -1,11 +1,17 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RegisterFormTypes } from '../types/RegisterFormTypes';
+import { RegisterFormTypes } from '../types/registerForm/registerFormTypes';
 import { useAppDispatch } from './useAppDispatch';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/slices/store';
 import { useToggle } from './useToggle';
-import { registerUser } from '../Redux/slices/registerSlice';
+import { loginUserThunk } from '../Redux/slices/authSlice';
 import { useState } from 'react';
+import { setItem } from '../utils/storage';
+import {
+  REGISTER_ERROR,
+  REGISTRATION_ERROR,
+  SET_SERVER_ERROR,
+} from '../constants/errorMessage';
 
 export const useRegisterForm = () => {
   const {
@@ -24,21 +30,20 @@ export const useRegisterForm = () => {
     console.log(data);
 
     try {
-      const response = await dispatch(registerUser(data)).unwrap();
+      const response = await dispatch(loginUserThunk(data)).unwrap();
 
       if (response) {
-        localStorage.setItem('authToken', response);
-        console.log('Токен сохранен', response);
+        setItem('useRegister', response);
 
         setServerError(null);
       }
     } catch (err: any) {
-      console.error('Ошибка при регистрации');
+      console.error(REGISTER_ERROR);
 
-      if (err === 'Ошибка регистрации') {
-        setServerError('Не удалось зарегистрировать пользователя');
+      if (err === REGISTER_ERROR) {
+        setServerError(SET_SERVER_ERROR);
       } else {
-        setServerError('Произошла ошибка при регистрации. Попробуйте снова');
+        setServerError(REGISTRATION_ERROR);
       }
     } finally {
       reset();

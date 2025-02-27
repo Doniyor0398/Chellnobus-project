@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import styles from './Input.module.scss';
-import { InputProps } from '../../types/InputTypes';
+import { InputProps } from '../../types/ui/inputTypes';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, icon, ...props }, ref) => {

@@ -1,17 +1,15 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-interface RegisterState {
-  loading: boolean;
-  error: string | null;
-}
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RegisterState } from '../../types/auth/authType';
+import { registerUser } from '../../services/userAuthApi';
+import { UNKOWN_ERROR } from '../../constants/errorMessage';
+import { removeItem, setItem } from '../../utils/storage';
 
 const initialState: RegisterState = {
   loading: false,
   error: null,
 };
 
-export const registerUser = createAsyncThunk<
+export const registerUserThunk = createAsyncThunk<
   string,
   { name: string; email: string; password: string; confirmPassword: string },
   { rejectValue: string }
@@ -19,17 +17,12 @@ export const registerUser = createAsyncThunk<
   'register/registerUser',
   async ({ name, email, password, confirmPassword }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('#', {
-        name,
-        email,
-        password,
-        confirmPassword,
-      });
-      return response.data.token;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || 'Ошибка регистрации',
-      );
+      const token = await registerUser(name, email, password, confirmPassword);
+      return token;
+    } catch (err: any) {
+      console.error(UNKOWN_ERROR);
+
+      return rejectWithValue(err.response?.data?.message || UNKOWN_ERROR);
     }
   },
 );
@@ -40,18 +33,20 @@ const registerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerUserThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        registerUser.fulfilled,
+        registerUserThunk.fulfilled,
         (state, action: PayloadAction<string>) => {
           state.loading = false;
-          localStorage.setItem('authToken', action.payload);
+          state.error = null;
+          removeItem('registerToken');
+          setItem('registerToken', action.payload);
         },
       )
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error =
           typeof action.payload === 'string'

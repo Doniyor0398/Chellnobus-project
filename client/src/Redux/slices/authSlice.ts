@@ -1,11 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-interface AuthState {
-  token: string | null;
-  loading: boolean;
-  error: string | null;
-}
+import { LOGIN_ERROR, UNKOWN_ERROR } from '../../constants/errorMessage';
+import { AuthState } from '../../types/auth/authType';
+import { loginUser } from '../../services/userAuthApi';
+import { removeItem, setItem } from '../../utils/storage';
 
 const initialState: AuthState = {
   token: null,
@@ -13,18 +10,21 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const loginUser = createAsyncThunk<
+export const loginUserThunk = createAsyncThunk<
   string,
   { email: string; password: string },
   { rejectValue: string }
 >('auth/loginUser', async ({ email, password }, { rejectWithValue }) => {
   try {
-    const response = await axios.post('#', { email, password });
-    return response.data.token;
+    const token = await loginUser(email, password);
+    if (!token) {
+      throw new Error('Токен не получен');
+    }
+    return token;
   } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || 'Ошибка авторизации',
-    );
+    console.error(error);
+
+    return rejectWithValue(error.response?.data?.message || LOGIN_ERROR);
   }
 });
 
@@ -34,28 +34,27 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.token = null;
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-      }
+      removeItem('authToken');
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUserThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action: PayloadAction<string>) => {
-        state.loading = false;
-        state.token = action.payload;
-        localStorage.setItem('authToken', action.payload);
-      })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(
+        loginUserThunk.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.token = action.payload;
+          setItem('authToken', action.payload);
+        },
+      )
+      .addCase(loginUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error =
-          typeof action.payload === 'string'
-            ? action.payload
-            : 'Неизвестная ошибка';
+          typeof action.payload === 'string' ? action.payload : UNKOWN_ERROR;
       });
   },
 });
