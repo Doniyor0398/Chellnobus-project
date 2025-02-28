@@ -1,30 +1,29 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { LOGIN_ERROR, UNKOWN_ERROR } from '../../constants/errorMessage';
+import { LOGIN_ERROR } from '../../constants/errorMessage';
 import { AuthState } from '../../types/auth/authType';
-import { loginUser } from '../../services/userAuthApi';
 import { removeItem, setItem } from '../../utils/storage';
 
 const initialState: AuthState = {
-  token: null,
+  token: localStorage.getItem('authToken') || null,
   loading: false,
   error: null,
 };
 
 export const loginUserThunk = createAsyncThunk<
   string,
-  { email: string; password: string },
+  { token: string },
   { rejectValue: string }
->('auth/loginUser', async ({ email, password }, { rejectWithValue }) => {
+>('auth/loginUser', async ({ token }, { rejectWithValue }) => {
   try {
-    const token = await loginUser(email, password);
     if (!token) {
       throw new Error('Токен не получен');
     }
+
     return token;
   } catch (error: any) {
-    console.error(error);
-
-    return rejectWithValue(error.response?.data?.message || LOGIN_ERROR);
+    const errorMessage =
+      error.response?.data?.message || error.message || LOGIN_ERROR;
+    return rejectWithValue(errorMessage);
   }
 });
 
@@ -53,8 +52,7 @@ const authSlice = createSlice({
       )
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          typeof action.payload === 'string' ? action.payload : UNKOWN_ERROR;
+        state.error = action.payload || LOGIN_ERROR;
       });
   },
 });

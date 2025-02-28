@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RegisterState } from '../../types/auth/authType';
 import { registerUser } from '../../services/userAuthApi';
-import { UNKOWN_ERROR } from '../../constants/errorMessage';
 import { removeItem, setItem } from '../../utils/storage';
+import { loginUserThunk } from './authSlice';
+import { AppDispatch } from './store';
 
 const initialState: RegisterState = {
   loading: false,
@@ -12,17 +13,19 @@ const initialState: RegisterState = {
 export const registerUserThunk = createAsyncThunk<
   string,
   { name: string; email: string; password: string; confirmPassword: string },
-  { rejectValue: string }
+  { rejectValue: string; dispatch: AppDispatch }
 >(
   'register/registerUser',
-  async ({ name, email, password, confirmPassword }, { rejectWithValue }) => {
+  async (
+    { name, email, password, confirmPassword },
+    { rejectWithValue, dispatch },
+  ) => {
     try {
       const token = await registerUser(name, email, password, confirmPassword);
+      dispatch(loginUserThunk({ token }));
       return token;
     } catch (err: any) {
-      console.error(UNKOWN_ERROR);
-
-      return rejectWithValue(err.response?.data?.message || UNKOWN_ERROR);
+      return rejectWithValue('Неизвестная ошибка при регистрации');
     }
   },
 );
@@ -44,14 +47,12 @@ const registerSlice = createSlice({
           state.error = null;
           removeItem('registerToken');
           setItem('registerToken', action.payload);
+          localStorage.setItem('authToken', action.payload);
         },
       )
       .addCase(registerUserThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          typeof action.payload === 'string'
-            ? action.payload
-            : 'Неизвестная ошибка';
+        state.error = action.payload || 'Неизвестная ошибка';
       });
   },
 });

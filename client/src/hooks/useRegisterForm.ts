@@ -12,6 +12,7 @@ import {
   REGISTRATION_ERROR,
   SET_SERVER_ERROR,
 } from '../constants/errorMessage';
+import { registerUserThunk } from '../Redux/slices/registerSlice';
 
 export const useRegisterForm = () => {
   const {
@@ -30,10 +31,17 @@ export const useRegisterForm = () => {
     console.log(data);
 
     try {
-      const response = await dispatch(loginUserThunk(data)).unwrap();
+      const response = await dispatch(registerUserThunk(data)).unwrap();
 
       if (response) {
-        setItem('useRegister', response);
+        setItem('authToken', response);
+
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken) {
+          dispatch(
+            loginUserThunk({ email: data.email, password: data.password }),
+          );
+        }
 
         setServerError(null);
       }
