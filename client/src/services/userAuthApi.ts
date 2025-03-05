@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { setItem } from '../utils/storage';
+
+const API_URL = '';
 
 export const registerUser = async (
   name: string,
@@ -7,39 +8,40 @@ export const registerUser = async (
   password: string,
   confirmPassword: string,
 ) => {
+  if (password !== confirmPassword) {
+    throw new Error('Пароли не совпадают');
+  }
+
   try {
-    const response = await axios.post('http://localhost:5001/users', {
+    const response = await axios.post(`${API_URL}/register`, {
       name,
       email,
       password,
-      confirmPassword,
     });
 
     if (response.data.token) {
-      setItem('jwtToken', response.data.token);
+      return response.data.token;
+    } else {
+      throw new Error('Не удалось зарегистрировать пользователя');
     }
-
-    return response.data.token;
-  } catch (error) {
-    console.error('Registration error:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Ошибка при регистрации');
   }
 };
 
 export const loginUser = async (email: string, password: string) => {
   try {
-    const response = await axios.post('http://localhost:5001/login', {
+    const response = await axios.post(`${API_URL}/login`, {
       email,
       password,
     });
 
     if (response.data.token) {
-      setItem('authToken', response.data.token); 
+      return { token: response.data.token };
+    } else {
+      throw new Error('Неверный email или пароль');
     }
-
-    return response.data.token;
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Ошибка при входе');
   }
 };

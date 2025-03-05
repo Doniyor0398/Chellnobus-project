@@ -1,25 +1,35 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { LOGIN_ERROR } from '../../constants/errorMessage';
 import { AuthState } from '../../types/auth/authType';
-import { removeItem, setItem } from '../../utils/storage';
+import { removeItem, setItem, getItem } from '../../utils/storage';
+import { loginUser } from '../../services/userAuthApi';
 
 const initialState: AuthState = {
-  token: localStorage.getItem('authToken') || null,
+  token: getItem('authToken') || null,
   loading: false,
   error: null,
 };
 
 export const loginUserThunk = createAsyncThunk<
   string,
-  { token: string },
+  { email?: string; password?: string; token?: string },
   { rejectValue: string }
->('auth/loginUser', async ({ token }, { rejectWithValue }) => {
+>('auth/loginUser', async ({ email, password, token }, { rejectWithValue }) => {
   try {
-    if (!token) {
+    if (token) {
+      return token;
+    }
+
+    if (!email || !password) {
+      throw new Error('Требуется email и пароль');
+    }
+
+    const response = await loginUser(email, password);
+    if (!response.token) {
       throw new Error('Токен не получен');
     }
 
-    return token;
+    return response.token;
   } catch (error: any) {
     const errorMessage =
       error.response?.data?.message || error.message || LOGIN_ERROR;
@@ -35,6 +45,10 @@ const authSlice = createSlice({
       state.token = null;
       removeItem('authToken');
     },
+    setAuthToken(state, action: PayloadAction<string>) {
+      state.token = action.payload;
+      setItem('authToken', action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,9 +59,8 @@ const authSlice = createSlice({
       .addCase(
         loginUserThunk.fulfilled,
         (state, action: PayloadAction<string>) => {
-          state.loading = false;
           state.token = action.payload;
-          setItem('authToken', action.payload);
+          state.loading = false;
         },
       )
       .addCase(loginUserThunk.rejected, (state, action) => {
@@ -57,5 +70,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setAuthToken } = authSlice.actions;
 export default authSlice.reducer;

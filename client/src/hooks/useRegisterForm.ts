@@ -1,58 +1,54 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler } from 'react-hook-form';
 import { RegisterFormTypes } from '../types/registerForm/registerFormTypes';
-import { useAppDispatch } from './useAppDispatch';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/slices/store';
-import { useToggle } from './useToggle';
-import { loginUserThunk } from '../Redux/slices/authSlice';
-import { useState } from 'react';
-import { setItem } from '../utils/storage';
-import {
-  REGISTER_ERROR,
-  REGISTRATION_ERROR,
-  SET_SERVER_ERROR,
-} from '../constants/errorMessage';
-import { registerUserThunk } from '../Redux/slices/registerSlice';
+import { loginUser, registerUser } from '../services/userAuthApi';
+import { setAuthToken } from '../Redux/userSlice/authSlice';
+import { useAuthForm } from './useAuthForm';
 
 export const useRegisterForm = () => {
   const {
     register,
-    getValues,
     handleSubmit,
-    formState: { errors },
+    getValues,
+    errors,
+    loading,
+    showPassword,
+    togglePasswordVisibility,
+    serverError,
+    setServerError,
     reset,
-  } = useForm<RegisterFormTypes>();
-  const dispatch = useAppDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
-  const [showPassword, togglePasswordVisibility] = useToggle(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+    navigate,
+    dispatch,
+  } = useAuthForm<RegisterFormTypes>();
 
   const onSubmit: SubmitHandler<RegisterFormTypes> = async (data) => {
-    console.log(data);
-
+    setServerError(null);
     try {
-      const response = await dispatch(registerUserThunk(data)).unwrap();
+      console.log('Data before registration:', data);
+      const response = await registerUser(
+        data.name,
+        data.email,
+        data.password,
+        data.confirmPassword,
+      );
 
-      if (response) {
-        setItem('authToken', response);
+      if (response.token) {
+        const loginResponse = await loginUser(data.email, data.password);
 
-        const storedToken = localStorage.getItem('authToken');
-        if (storedToken) {
-          dispatch(
-            loginUserThunk({ email: data.email, password: data.password }),
-          );
+        if (loginResponse.token) {
+          localStorage.setItem('authToken', loginResponse.token);
+          dispatch(setAuthToken(loginResponse.token));
+          navigate('/');
+        } else {
+          setServerError('Не удалось войти в систему после регистрации');
         }
-
-        setServerError(null);
-      }
-    } catch (err: any) {
-      console.error(REGISTER_ERROR);
-
-      if (err === REGISTER_ERROR) {
-        setServerError(SET_SERVER_ERROR);
       } else {
-        setServerError(REGISTRATION_ERROR);
+        setServerError('Не удалось получить токен при регистрации');
       }
+    } catch (error) {
+      console.log('Error:', error);
+      setServerError(
+        error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+      );
     } finally {
       reset();
     }
@@ -62,12 +58,12 @@ export const useRegisterForm = () => {
     register,
     handleSubmit,
     getValues,
-    error,
     errors,
     loading,
     showPassword,
-    serverError,
     togglePasswordVisibility,
+    serverError,
     onSubmit,
+    setServerError,
   };
 };

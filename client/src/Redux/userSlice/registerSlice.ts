@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RegisterState } from '../../types/auth/authType';
-import { registerUser } from '../../services/userAuthApi';
+import { loginUser, registerUser } from '../../services/userAuthApi';
 import { removeItem, setItem } from '../../utils/storage';
 import { loginUserThunk } from './authSlice';
-import { AppDispatch } from './store';
 
 const initialState: RegisterState = {
   loading: false,
@@ -13,7 +12,7 @@ const initialState: RegisterState = {
 export const registerUserThunk = createAsyncThunk<
   string,
   { name: string; email: string; password: string; confirmPassword: string },
-  { rejectValue: string; dispatch: AppDispatch }
+  { rejectValue: string }
 >(
   'register/registerUser',
   async (
@@ -21,11 +20,29 @@ export const registerUserThunk = createAsyncThunk<
     { rejectWithValue, dispatch },
   ) => {
     try {
-      const token = await registerUser(name, email, password, confirmPassword);
-      dispatch(loginUserThunk({ token }));
-      return token;
+      const response = await registerUser(
+        name,
+        email,
+        password,
+        confirmPassword,
+      );
+
+      if (response.token) {
+        const loginResponse = await loginUser(email, password);
+
+        if (loginResponse.token) {
+          dispatch(loginUserThunk({ token: loginResponse.token }));
+          return loginResponse.token;
+        } else {
+          throw new Error('Не удалось войти в систему после регистрации');
+        }
+      } else {
+        throw new Error('Токен не получен');
+      }
     } catch (err: any) {
-      return rejectWithValue('Неизвестная ошибка при регистрации');
+      return rejectWithValue(
+        err.message || 'Неизвестная ошибка при регистрации',
+      );
     }
   },
 );

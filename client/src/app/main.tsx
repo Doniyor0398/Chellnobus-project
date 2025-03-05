@@ -2,7 +2,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
-import { store } from '../Redux/slices/store';
+import { store } from '../Redux/store/store';
+import '../firebase';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

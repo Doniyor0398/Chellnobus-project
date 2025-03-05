@@ -3,31 +3,71 @@ import { useRegisterForm } from '../../hooks/useRegisterForm';
 import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegisterForm.module.scss';
 
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/userSlice/useSlice';
 import IconUser from '../../assets/icon/user.svg';
 import IconEmail from '../../assets/icon/mail.svg';
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
+import { RegisterFormTypes } from '../../types/registerForm/registerFormTypes';
 
 const RegisterForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     loading,
     errors,
-    onSubmit,
+    // onSubmit,
     showPassword,
     togglePasswordVisibility,
     serverError,
     getValues,
+    setServerError,
   } = useRegisterForm();
+  const auth = getAuth();
+
+  const handleRegister = async (data: RegisterFormTypes) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
+      const user = userCredential.user;
+
+      const token = await user.getIdToken();
+
+      dispatch(
+        setUser({
+          name: user.displayName || data.name,
+          email: user.email,
+          token: token,
+          id: user.uid,
+        }),
+      );
+
+      navigate('/');
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
+        setServerError(
+          'Этот email уже используется. Попробуйте войти или использовать другой email.',
+        );
+      } else {
+        setServerError('Произошла ошибка при регистрации. Попробуйте снова.');
+      }
+    }
+  };
 
   return (
     <div className={styles['register-form']}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleRegister)}
         className={styles['register-form__form']}
       >
         <div className={styles['register-form__title']}>Регистрация</div>
@@ -45,7 +85,7 @@ const RegisterForm: React.FC = () => {
               },
               maxLength: {
                 value: 20,
-                message: 'Имя должно содержать максимум 20 символа.',
+                message: 'Имя должно содержать максимум 20 символов.',
               },
             })}
             icon={<img src={IconUser} alt="User Icon" />}

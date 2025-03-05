@@ -1,34 +1,71 @@
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/userSlice/useSlice';
+import { useNavigate } from 'react-router-dom';
+
 import React from 'react';
-
 import { useLoginForm } from '../../hooks/useLoginForm';
-
 import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
-
 import IconUser from '../../assets/icon/mail.svg';
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
-
 import styles from './LoginForm.module.scss';
 import { Link } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     loading,
     errors,
-    onSubmit,
+    // onSubmit,
     showPassword,
     togglePasswordVisibility,
     serverError,
   } = useLoginForm();
 
+  const handleLogin = async (data: {
+    email: string;
+    password: string;
+    name?: string;
+  }) => {
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
+      const user = userCredential.user;
+
+      // Получаем токен
+      const token = await user.getIdToken();
+
+      // Сохраняем данные пользователя в Redux
+      dispatch(
+        setUser({
+          name: user.displayName || '', // <--- Здесь проверяем, есть ли name
+          email: user.email,
+          token: token,
+          id: user.uid,
+        }),
+      );
+
+      // Перенаправляем на главную страницу
+      navigate('/');
+    } catch (error) {
+      console.error('Ошибка входа:', error);
+    }
+  };
+
   return (
     <div className={styles['login-form']}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleLogin)}
         className={styles['login-form__form']}
       >
         <div className={styles['login-form__title']}>Вход</div>
