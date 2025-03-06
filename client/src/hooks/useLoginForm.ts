@@ -1,44 +1,38 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { LoginFormTypes } from '../types/LoginFormTypes';
-import { useAppDispatch } from './useAppDispatch';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/slices/store';
-import { useToggle } from './useToggle';
-import { loginUser } from '../Redux/slices/authSlice';
-import { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import { LoginFormTypes } from '../types/loginFormTypes';
+import { loginUser } from '../services/authService/userAuthApi';
+import { setAuthToken } from '../Redux/userSlice/authSlice';
+import { useAuthForm } from './useAuthForm';
+import { UNKOWN_ERROR } from '../constants/errorMessage';
 
 export const useLoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    errors,
+    loading,
+    showPassword,
+    togglePasswordVisibility,
+    serverError,
+    setServerError,
     reset,
-  } = useForm<LoginFormTypes>();
-  const dispatch = useAppDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
-  const [showPassword, togglePasswordVisibility] = useToggle(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+    navigate,
+    dispatch,
+  } = useAuthForm<LoginFormTypes>();
 
   const onSubmit: SubmitHandler<LoginFormTypes> = async (data) => {
-    console.log(data);
-
+    setServerError('');
     try {
-      const response = await dispatch(loginUser(data)).unwrap();
-
-      if (response) {
-        localStorage.setItem('authToken', response);
-        console.log('Токен сохранен', response);
-
-        setServerError(null);
-      }
-    } catch (err: any) {
-      console.error('Ошибка при логине');
-
-      if (err === 'Ошибка авторизации') {
-        setServerError('Неверный логин или пароль');
+      const response = await loginUser(data.email, data.password);
+      if (response.token) {
+        dispatch(setAuthToken({ token: response.token, name: response.name }));
+        localStorage.setItem('authToken', response.token);
+        navigate('/');
       } else {
-        setServerError('Произошла ошибка при авторизации. Попробуйте снова');
+        setServerError('Не удалось получить токен');
       }
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
     } finally {
       reset();
     }
@@ -47,12 +41,12 @@ export const useLoginForm = () => {
   return {
     register,
     handleSubmit,
-    error,
     errors,
     loading,
     showPassword,
-    serverError,
     togglePasswordVisibility,
+    serverError,
     onSubmit,
+    setServerError,
   };
 };

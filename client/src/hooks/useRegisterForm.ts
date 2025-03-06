@@ -1,45 +1,51 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { RegisterFormTypes } from '../types/RegisterFormTypes';
-import { useAppDispatch } from './useAppDispatch';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/slices/store';
-import { useToggle } from './useToggle';
-import { registerUser } from '../Redux/slices/registerSlice';
-import { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import { RegisterFormTypes } from '../types/registerFormTypes';
+import { loginUser, registerUser } from '../services/authService/userAuthApi';
+import { setAuthToken } from '../Redux/userSlice/authSlice';
+import { useAuthForm } from './useAuthForm';
+import { UNKOWN_ERROR } from '../constants/errorMessage';
 
 export const useRegisterForm = () => {
   const {
     register,
-    getValues,
     handleSubmit,
-    formState: { errors },
+    getValues,
+    errors,
+    loading,
+    showPassword,
+    togglePasswordVisibility,
+    serverError,
+    setServerError,
     reset,
-  } = useForm<RegisterFormTypes>();
-  const dispatch = useAppDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
-  const [showPassword, togglePasswordVisibility] = useToggle(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+    navigate,
+    dispatch,
+  } = useAuthForm<RegisterFormTypes>();
 
   const onSubmit: SubmitHandler<RegisterFormTypes> = async (data) => {
-    console.log(data);
-
+    setServerError('');
     try {
-      const response = await dispatch(registerUser(data)).unwrap();
+      const response = await registerUser(
+        data.name,
+        data.email,
+        data.password,
+        data.confirmPassword,
+      );
 
-      if (response) {
-        localStorage.setItem('authToken', response);
-        console.log('Токен сохранен', response);
+      if (response.token) {
+        const loginResponse = await loginUser(data.email, data.password);
 
-        setServerError(null);
-      }
-    } catch (err: any) {
-      console.error('Ошибка при регистрации');
-
-      if (err === 'Ошибка регистрации') {
-        setServerError('Не удалось зарегистрировать пользователя');
+        if (loginResponse.token) {
+          localStorage.setItem('authToken', loginResponse.token);
+          dispatch(setAuthToken(loginResponse.token));
+          navigate('/');
+        } else {
+          setServerError('Не удалось войти в систему после регистрации');
+        }
       } else {
-        setServerError('Произошла ошибка при регистрации. Попробуйте снова');
+        setServerError('Не удалось получить токен');
       }
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
     } finally {
       reset();
     }
@@ -49,12 +55,12 @@ export const useRegisterForm = () => {
     register,
     handleSubmit,
     getValues,
-    error,
     errors,
     loading,
     showPassword,
-    serverError,
     togglePasswordVisibility,
+    serverError,
     onSubmit,
+    setServerError,
   };
 };

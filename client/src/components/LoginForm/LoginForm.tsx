@@ -1,6 +1,10 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useLoginForm } from '../../hooks/useLoginForm';
+import styles from './LoginForm.module.scss';
 
 import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
@@ -10,25 +14,29 @@ import IconUser from '../../assets/icon/mail.svg';
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
 
-import styles from './LoginForm.module.scss';
-import { Link } from 'react-router-dom';
+import { handleLogin } from '../../services/authService/handleLogin';
+import FormError from '../FormError/FormError';
 
 const LoginForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     loading,
     errors,
-    onSubmit,
     showPassword,
     togglePasswordVisibility,
     serverError,
+    setServerError,
   } = useLoginForm();
 
   return (
     <div className={styles['login-form']}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) =>
+          handleLogin(data, dispatch, setServerError, navigate),
+        )}
         className={styles['login-form__form']}
       >
         <div className={styles['login-form__title']}>Вход</div>
@@ -36,10 +44,9 @@ const LoginForm: React.FC = () => {
         <div className={styles['login-form__label']}>
           <Input
             type="email"
-            placeholder="Email*"
+            placeholder="Эл.почта*"
             className={styles['login-form__input']}
             {...register('email', {
-              setValueAs: (value) => value.trim(),
               required: 'Email обязателен',
               pattern: {
                 value:
@@ -54,11 +61,7 @@ const LoginForm: React.FC = () => {
             icon={<img src={IconUser} alt="Email Icon" />}
           />
 
-          {errors.email && (
-            <span className={styles['login-form__error']}>
-              {errors.email.message}
-            </span>
-          )}
+          {errors.email && <FormError message={errors.email.message} />}
         </div>
 
         <div className={styles['login-form__label']}>
@@ -86,11 +89,7 @@ const LoginForm: React.FC = () => {
             }
           />
 
-          {errors.password && (
-            <span className={styles['login-form__error']}>
-              {errors.password.message}
-            </span>
-          )}
+          {errors.password && <FormError message={errors.password.message} />}
 
           {serverError && (
             <span className={styles['login-form__error']}>{serverError}</span>

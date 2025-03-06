@@ -1,16 +1,17 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from '../pages/Home/Home';
-import LoginForm from '../components/LoginForm/LoginForm';
-import RegisterForm from '../components/RegisterForm/RegisterForm';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from '../pages/HomePage/HomePage';
+import LoginPage from '../pages/Login/LoginPage';
+import RegisterPage from '../pages/Register/RegisterPage';
 
-const AppRouter = () => (
-  <Router>
+const AppRouter: React.FC = () => {
+  return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/register" element={<RegisterForm />} />
-      <Route path="/login" element={<LoginForm />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
     </Routes>
-  </Router>
-);
+  );
+};
 
 export default AppRouter;

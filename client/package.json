@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "json-server --watch db.json --port 5000",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "dev": "vite",
@@ -13,27 +14,31 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
+    "@types/firebase": "^2.4.32",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "firebase": "^11.4.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.2.0"
+    "react-router-dom": "^7.2.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
+    "@types/node": "^22.13.9",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.20.1",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^15.14.0",
-    "prettier": "^3.5.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
     "sass-embedded": "^1.83.4",
-    "typescript": "~5.7.2",
+    "typescript": "^5.8.2",
     "vite": "^6.1.0"
   }
 }

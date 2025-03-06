@@ -1,33 +1,42 @@
 import React from 'react';
-import { useRegisterForm } from '../../hooks/useRegisterForm';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import Button from '../../ui/Button/Button';
 import IconButton from '../../ui/IconButtons/IconButtons';
 import Input from '../../ui/Input/Input';
-import { Link } from 'react-router-dom';
+
+import { useRegisterForm } from '../../hooks/useRegisterForm';
 import styles from './RegisterForm.module.scss';
 
 import IconUser from '../../assets/icon/user.svg';
 import IconEmail from '../../assets/icon/mail.svg';
 import noHidden from '../../assets/icon/no-hidden.svg';
 import hidden from '../../assets/icon/hidden.svg';
+import { handleRegister } from '../../services/authService/handleRegister';
+import FormError from '../FormError/FormError';
 
 const RegisterForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     loading,
     errors,
-    onSubmit,
     showPassword,
     togglePasswordVisibility,
     serverError,
     getValues,
+    setServerError,
   } = useRegisterForm();
 
   return (
     <div className={styles['register-form']}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) =>
+          handleRegister(data, dispatch, setServerError, navigate),
+        )}
         className={styles['register-form__form']}
       >
         <div className={styles['register-form__title']}>Регистрация</div>
@@ -45,43 +54,35 @@ const RegisterForm: React.FC = () => {
               },
               maxLength: {
                 value: 20,
-                message: 'Имя должно содержать максимум 20 символа.',
+                message: 'Имя должно содержать максимум 20 символов.',
               },
             })}
             icon={<img src={IconUser} alt="User Icon" />}
           />
-          {errors.name && (
-            <span className={styles['register-form__error']}>
-              {errors.name.message}
-            </span>
-          )}
+          {errors.name && <FormError message={errors.name.message} />}
         </div>
 
         <div className={styles['register-form__label']}>
           <Input
             type="email"
-            placeholder="Email*"
+            placeholder="Эл.почта*"
             className={styles['register-form__input']}
             {...register('email', {
               setValueAs: (value) => value.trim(),
-              required: 'Email обязателен',
+              required: 'Эл. почта обязательна',
               pattern: {
                 value:
                   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|co\.uk|ru|ua|etc)$/i,
-                message: 'Неверный формат email',
+                message: 'Неверный формат Эл.почта',
               },
               maxLength: {
                 value: 50,
-                message: 'E-mail не должен превышать 50 символов.',
+                message: 'Эл.почта не должен превышать 50 символов.',
               },
             })}
             icon={<img src={IconEmail} alt="Email Icon" />}
           />
-          {errors.email && (
-            <span className={styles['register-form__error']}>
-              {errors.email.message}
-            </span>
-          )}
+          {errors.email && <FormError message={errors.email.message} />}
         </div>
 
         <div className={styles['register-form__label']}>
@@ -108,11 +109,7 @@ const RegisterForm: React.FC = () => {
               />
             }
           />
-          {errors.password && (
-            <span className={styles['register-form__error']}>
-              {errors.password.message}
-            </span>
-          )}
+          {errors.password && <FormError message={errors.password.message} />}
         </div>
 
         <div className={styles['register-form__label']}>
