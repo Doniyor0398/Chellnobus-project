@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { LOGIN_ERROR } from '../../constants/errorMessage';
 import { AuthState } from '../../types/authType';
 import { removeItem, setItem, getItem } from '../../utils/storage';
-import { loginUser } from '../../services/userAuthApi';
+import { loginUser } from '../../services/authService/userAuthApi';
 
 const initialState: AuthState = {
   token: getItem('authToken') || null,

@@ -1,6 +1,6 @@
 import { SubmitHandler } from 'react-hook-form';
 import { LoginFormTypes } from '../types/loginFormTypes';
-import { loginUser } from '../services/userAuthApi';
+import { loginUser } from '../services/authService/userAuthApi';
 import { setAuthToken } from '../Redux/userSlice/authSlice';
 import { useAuthForm } from './useAuthForm';
 import { UNKOWN_ERROR } from '../constants/errorMessage';
