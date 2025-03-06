@@ -1,27 +1,22 @@
-// userSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserSliceState } from '../../types/userSliceTypes';
+import { removeItem } from '../../utils/storage';
 
-interface UserState {
-  email: string | null;
-  name: string | null;
-  token: string | null;
-  id: string | null;
-}
-
-const initialState: UserState = {
-  email: null,
+const initialState: UserSliceState = {
   name: null,
+  email: null,
   token: null,
   id: null,
+  isAuth: false,
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserState>) => {
+    setUser: (state, action: PayloadAction<UserSliceState>) => {
       state.email = action.payload.email;
-      state.name = action.payload.name; // Добавляем имя
+      state.name = action.payload.name;
       state.token = action.payload.token;
       state.id = action.payload.id;
     },
@@ -30,6 +25,7 @@ const userSlice = createSlice({
       state.name = null;
       state.token = null;
       state.id = null;
+      removeItem('authToken');
     },
   },
 });

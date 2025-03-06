@@ -1,28 +1,27 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { removeUser } from '../../Redux/userSlice/useSlice';
-import { useDispatch } from 'react-redux';
+import { logout } from '../../Redux/userSlice/authSlice';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 const HomePage: React.FC = () => {
-  const { isAuth, name } = useAuth();
+  const { isAuth, email } = useAuth();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!isAuth) {
-      navigate('/login');
-    }
+    if (!isAuth) navigate('/login');
   }, [isAuth, navigate]);
 
-  if (!isAuth) {
-    return null; // Можно вернуть null, так как редирект произойдет сразу, если пользователь не авторизован
-  }
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <div>
-      <h1>Welcome {name}</h1>
-      <button onClick={() => dispatch(removeUser())}>Выйти</button>
+      <h1>Welcome {email}</h1>
+      <button onClick={handleLogout}>Выйти</button>
     </div>
   );
 };

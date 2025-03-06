@@ -18,7 +18,7 @@ export const useAuthForm = <T extends Record<string, any>>() => {
   const dispatch = useAppDispatch();
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const [showPassword, togglePasswordVisibility] = useToggle(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string>('');
   const navigate = useNavigate();
 
   return {

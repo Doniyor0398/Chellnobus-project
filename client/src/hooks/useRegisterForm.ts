@@ -1,8 +1,9 @@
 import { SubmitHandler } from 'react-hook-form';
-import { RegisterFormTypes } from '../types/registerForm/registerFormTypes';
+import { RegisterFormTypes } from '../types/registerFormTypes';
 import { loginUser, registerUser } from '../services/userAuthApi';
 import { setAuthToken } from '../Redux/userSlice/authSlice';
 import { useAuthForm } from './useAuthForm';
+import { UNKOWN_ERROR } from '../constants/errorMessage';
 
 export const useRegisterForm = () => {
   const {
@@ -21,9 +22,8 @@ export const useRegisterForm = () => {
   } = useAuthForm<RegisterFormTypes>();
 
   const onSubmit: SubmitHandler<RegisterFormTypes> = async (data) => {
-    setServerError(null);
+    setServerError('');
     try {
-      console.log('Data before registration:', data);
       const response = await registerUser(
         data.name,
         data.email,
@@ -42,13 +42,10 @@ export const useRegisterForm = () => {
           setServerError('Не удалось войти в систему после регистрации');
         }
       } else {
-        setServerError('Не удалось получить токен при регистрации');
+        setServerError('Не удалось получить токен');
       }
     } catch (error) {
-      console.log('Error:', error);
-      setServerError(
-        error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
-      );
+      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
     } finally {
       reset();
     }

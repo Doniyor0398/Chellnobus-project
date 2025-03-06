@@ -1,8 +1,9 @@
 import { SubmitHandler } from 'react-hook-form';
-import { LoginFormTypes } from '../types/loginForm/loginFormTypes';
+import { LoginFormTypes } from '../types/loginFormTypes';
 import { loginUser } from '../services/userAuthApi';
 import { setAuthToken } from '../Redux/userSlice/authSlice';
 import { useAuthForm } from './useAuthForm';
+import { UNKOWN_ERROR } from '../constants/errorMessage';
 
 export const useLoginForm = () => {
   const {
@@ -20,23 +21,18 @@ export const useLoginForm = () => {
   } = useAuthForm<LoginFormTypes>();
 
   const onSubmit: SubmitHandler<LoginFormTypes> = async (data) => {
-    setServerError(null);
+    setServerError('');
     try {
       const response = await loginUser(data.email, data.password);
       if (response.token) {
+        dispatch(setAuthToken({ token: response.token, name: response.name }));
         localStorage.setItem('authToken', response.token);
-        dispatch(setAuthToken(response.token));
-        setServerError(null);
         navigate('/');
       } else {
         setServerError('Не удалось получить токен');
       }
     } catch (error) {
-      if (error instanceof Error) {
-        setServerError(error.message);
-      } else {
-        setServerError('Произошла неизвестная ошибка');
-      }
+      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
     } finally {
       reset();
     }
@@ -51,5 +47,6 @@ export const useLoginForm = () => {
     togglePasswordVisibility,
     serverError,
     onSubmit,
+    setServerError,
   };
 };

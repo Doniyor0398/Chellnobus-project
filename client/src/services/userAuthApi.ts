@@ -36,8 +36,11 @@ export const loginUser = async (email: string, password: string) => {
       password,
     });
 
-    if (response.data.token) {
-      return { token: response.data.token };
+    if (response.data.token && response.data.name) {
+      return {
+        token: response.data.token,
+        name: response.data.name,
+      };
     } else {
       throw new Error('Неверный email или пароль');
     }

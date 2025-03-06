@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { LOGIN_ERROR } from '../../constants/errorMessage';
-import { AuthState } from '../../types/auth/authType';
+import { AuthState } from '../../types/authType';
 import { removeItem, setItem, getItem } from '../../utils/storage';
 import { loginUser } from '../../services/userAuthApi';
 
@@ -8,6 +8,7 @@ const initialState: AuthState = {
   token: getItem('authToken') || null,
   loading: false,
   error: null,
+  name: null,
 };
 
 export const loginUserThunk = createAsyncThunk<
@@ -16,18 +17,14 @@ export const loginUserThunk = createAsyncThunk<
   { rejectValue: string }
 >('auth/loginUser', async ({ email, password, token }, { rejectWithValue }) => {
   try {
-    if (token) {
-      return token;
-    }
+    if (token) return token;
 
     if (!email || !password) {
       throw new Error('Требуется email и пароль');
     }
 
     const response = await loginUser(email, password);
-    if (!response.token) {
-      throw new Error('Токен не получен');
-    }
+    if (!response.token) throw new Error('Токен не получен');
 
     return response.token;
   } catch (error: any) {
@@ -41,34 +38,21 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setAuthToken(
+      state,
+      action: PayloadAction<{ token: string; name: string }>,
+    ) {
+      state.token = action.payload.token;
+      state.name = action.payload.name;
+      setItem('authToken', action.payload.token);
+    },
     logout(state) {
       state.token = null;
+      state.name = null;
       removeItem('authToken');
     },
-    setAuthToken(state, action: PayloadAction<string>) {
-      state.token = action.payload;
-      setItem('authToken', action.payload);
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginUserThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        loginUserThunk.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.token = action.payload;
-          state.loading = false;
-        },
-      )
-      .addCase(loginUserThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || LOGIN_ERROR;
-      });
   },
 });
 
-export const { logout, setAuthToken } = authSlice.actions;
+export const { setAuthToken, logout } = authSlice.actions;
 export default authSlice.reducer;
