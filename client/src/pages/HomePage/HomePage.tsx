@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { logout } from '../../Redux/userSlice/authSlice';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAuth } from '../../features/auth/hooks/useAuth';
+import { logout } from '../../features/auth/slices/authSlice';
+import { useAppDispatch } from '../../shared/hooks/useAppDispatch';
 
 const HomePage: React.FC = () => {
   const { isAuth, email } = useAuth();
