@@ -7,7 +7,6 @@ import { useLoginForm } from '../../hooks/useLoginForm';
 import styles from './LoginForm.module.scss';
 
 import Button from '../../../../shared/ui/Button/Button';
-import IconButton from '../../../../shared/ui/IconButtons/IconButtons';
 import Input from '../../../../shared/ui/Input/Input';
 
 import IconUser from '../../../../assets/icon/mail.svg';
@@ -81,9 +80,15 @@ const LoginForm: React.FC = () => {
               },
             })}
             icon={
-              <IconButton
-                src={showPassword ? noHidden : hidden}
-                alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+              <Button
+                type="button"
+                variant="icon"
+                icon={
+                  <img
+                    src={showPassword ? noHidden : hidden}
+                    alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                  />
+                }
                 onClick={togglePasswordVisibility}
               />
             }
