@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   CssBaseline,
@@ -20,9 +20,10 @@ import {
   Schedule,
   Route,
   DirectionsCar,
-  Person,
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
+  AccountCircle as AccountCircleIcon,
+  ExitToApp,
 } from '@mui/icons-material';
 
 const drawerWidth = 256;
@@ -46,16 +47,14 @@ export const Dashboard: React.FC = () => {
     switch (location.pathname) {
       case '/':
         return 'Главная';
-      case '/monitoring':
-        return 'Мониторинг';
-      case '/planning':
-        return 'Планирование';
-      case '/routes':
-        return 'Маршруты';
-      case '/fleet':
-        return 'Автопарк';
+      case '/change':
+        return 'Смена';
       case '/drivers':
-        return 'Водители и их графики';
+        return 'Водители';
+      case '/orders':
+        return 'Заказы';
+      case '/users':
+        return 'Пользователи';
       default:
         return 'Главная';
     }
@@ -118,33 +117,27 @@ export const Dashboard: React.FC = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/monitoring">
+            <ListItemButton component={Link} to="/change">
               <Schedule sx={{ mr: 2 }} />
-              <ListItemText primary="Мониторинг" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/planning">
-              <Route sx={{ mr: 2 }} />
-              <ListItemText primary="Планирование" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/routes">
-              <DirectionsCar sx={{ mr: 2 }} />
-              <ListItemText primary="Маршруты" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/fleet">
-              <DirectionsCar sx={{ mr: 2 }} />
-              <ListItemText primary="Автопарк" />
+              <ListItemText primary="Смена" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/drivers">
-              <Person sx={{ mr: 2 }} />
-              <ListItemText primary="Водители и их графики" />
+              <Route sx={{ mr: 2 }} />
+              <ListItemText primary="Водители" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/orders">
+              <DirectionsCar sx={{ mr: 2 }} />
+              <ListItemText primary="Заказы" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/users">
+              <AccountCircleIcon sx={{ mr: 2 }} />
+              <ListItemText primary="Пользователи" />
             </ListItemButton>
           </ListItem>
         </List>
@@ -152,6 +145,7 @@ export const Dashboard: React.FC = () => {
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={handleLogout}>
+              <ExitToApp sx={{ mr: 2 }} />
               <ListItemText primary="Выйти" />
             </ListItemButton>
           </ListItem>

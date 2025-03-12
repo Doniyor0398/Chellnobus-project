@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 
-const HomePage: React.FC = () => {
+const Home: React.FC = () => {
   const { isAuth, name } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -29,4 +29,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default Home;
