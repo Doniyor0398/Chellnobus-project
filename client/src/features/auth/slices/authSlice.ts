@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { LOGIN_ERROR } from '../../../constants/errorMessage';
 import { AuthStateTypes } from '../types/authStateTypes';
 import { removeItem, setItem, getItem } from '../../../shared/utils/storage';
 import { loginUser } from '../api/userAuthApi';
@@ -27,8 +26,7 @@ export const loginUserThunk = createAsyncThunk<
 
     return response.token;
   } catch (error: any) {
-    const errorMessage =
-      error.response?.data?.message || error.message || LOGIN_ERROR;
+    const errorMessage = error.response?.data?.message || error.message;
     return rejectWithValue(errorMessage);
   }
 });

@@ -1,27 +1,30 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
-import { logout } from '../../features/auth/slices/authSlice';
-import { useAppDispatch } from '../../shared/hooks/useAppDispatch';
 
 const HomePage: React.FC = () => {
-  const { isAuth, email } = useAuth();
+  const { isAuth, name } = useAuth();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuth) navigate('/login');
+    const timer = setTimeout(() => {
+      setLoading(false);
+      if (!isAuth) {
+        navigate('/login');
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [isAuth, navigate]);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
+  if (loading) {
+    return <p>Загрузка...</p>;
+  }
 
   return (
     <div>
-      <h1>Welcome {email}</h1>
-      <button onClick={handleLogout}>Выйти</button>
+      <h1>Welcome {name || 'Гость'}</h1>
     </div>
   );
 };

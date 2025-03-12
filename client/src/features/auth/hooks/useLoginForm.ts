@@ -3,7 +3,6 @@ import { LoginFormTypes } from '../types/loginFormTypes';
 import { loginUser } from '../api/userAuthApi';
 import { setAuthToken } from '../slices/authSlice';
 import { useAuthForm } from './useAuthForm';
-import { UNKOWN_ERROR } from '../../../constants/errorMessage';
 
 export const useLoginForm = () => {
   const {
@@ -32,7 +31,9 @@ export const useLoginForm = () => {
         setServerError('Не удалось получить токен');
       }
     } catch (error) {
-      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
+      setServerError(
+        error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+      );
     } finally {
       reset();
     }

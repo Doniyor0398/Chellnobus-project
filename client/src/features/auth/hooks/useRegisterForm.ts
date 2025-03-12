@@ -3,7 +3,6 @@ import { RegisterFormTypes } from '../types/registerFormTypes';
 import { loginUser, registerUser } from '../..//auth/api/userAuthApi';
 import { setAuthToken } from '../slices/authSlice';
 import { useAuthForm } from './useAuthForm';
-import { UNKOWN_ERROR } from '../../../constants/errorMessage';
 
 export const useRegisterForm = () => {
   const {
@@ -47,7 +46,9 @@ export const useRegisterForm = () => {
         setServerError('Не удалось получить токен');
       }
     } catch (error) {
-      setServerError(error instanceof Error ? error.message : UNKOWN_ERROR);
+      setServerError(
+        error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+      );
     } finally {
       reset();
     }

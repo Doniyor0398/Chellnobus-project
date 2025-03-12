@@ -1,4 +1,8 @@
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import { setUser } from '../../../entities/user/slice/userSlice';
 import { Dispatch } from 'react';
 
@@ -19,6 +23,8 @@ export const handleRegister = async (
       data.password,
     );
     const user = userCredential.user;
+
+    await updateProfile(user, { displayName: trimmedName });
 
     const token = await user.getIdToken();
 
