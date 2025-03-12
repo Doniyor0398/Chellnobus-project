@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import Button from '../../../../shared/ui/Button/Button';
-import IconButton from '../../../../shared/ui/IconButtons/IconButtons';
 import Input from '../../../../shared/ui/Input/Input';
 
 import { useRegisterForm } from '../../hooks/useRegisterForm';
@@ -26,6 +25,8 @@ const RegisterForm: React.FC = () => {
     errors,
     showPassword,
     togglePasswordVisibility,
+    showConfirmPassword,
+    toggleConfirmPasswordVisibility,
     serverError,
     getValues,
     setServerError,
@@ -102,9 +103,15 @@ const RegisterForm: React.FC = () => {
               },
             })}
             icon={
-              <IconButton
-                src={showPassword ? noHidden : hidden}
-                alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+              <Button
+                type="button"
+                variant="icon"
+                icon={
+                  <img
+                    src={showPassword ? noHidden : hidden}
+                    alt={showPassword ? 'Скрыт пароль' : 'Показать пароль'}
+                  />
+                }
                 onClick={togglePasswordVisibility}
               />
             }
@@ -115,7 +122,7 @@ const RegisterForm: React.FC = () => {
         <div className={styles['register-form__label']}>
           <Input
             placeholder="Подтвердите пароль*"
-            type={showPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? 'text' : 'password'}
             className={`${styles['register-form__input']}`}
             {...register('confirmPassword', {
               required: 'Подтверждение пароля обязательно',
@@ -123,10 +130,18 @@ const RegisterForm: React.FC = () => {
                 value === getValues('password') || 'Пароли не совпадают',
             })}
             icon={
-              <IconButton
-                src={showPassword ? noHidden : hidden}
-                alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-                onClick={togglePasswordVisibility}
+              <Button
+                type="button"
+                variant="icon"
+                icon={
+                  <img
+                    src={showConfirmPassword ? noHidden : hidden}
+                    alt={
+                      showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'
+                    }
+                  />
+                }
+                onClick={toggleConfirmPasswordVisibility}
               />
             }
           />
