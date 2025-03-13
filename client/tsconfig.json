@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "files": [],
   "references": [

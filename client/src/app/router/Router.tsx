@@ -5,7 +5,7 @@ import LoginPage from '../../pages/Login/LoginPage';
 import RegisterPage from '../../pages/Register/RegisterPage';
 import Dashboard from '../../widgets/Dashboard/Dashboard';
 import Change from '../../pages/Change/Change';
-import Drivers from '../../pages/Drivers/Drivers';
+import { Drivers } from '../../pages/Drivers/Drivers';
 import Orders from '../../pages/Orders/Orders';
 import Users from '../../pages/Users/Users';
 

@@ -3,6 +3,7 @@ import { LoginFormTypes } from '../types/loginFormTypes';
 import { loginUser } from '../api/userAuthApi';
 import { setAuthToken } from '../slices/authSlice';
 import { useAuthForm } from './useAuthForm';
+import { setItem } from '../../../shared/utils/storage';
 
 export const useLoginForm = () => {
   const {
@@ -25,7 +26,7 @@ export const useLoginForm = () => {
       const response = await loginUser(data.email, data.password);
       if (response.token) {
         dispatch(setAuthToken({ token: response.token, name: response.name }));
-        localStorage.setItem('authToken', response.token);
+        setItem('authToken', response.token);
         navigate('/');
       } else {
         setServerError('Не удалось получить токен');

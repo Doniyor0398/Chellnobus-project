@@ -2,9 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 
 import styles from './Input.module.scss';
-import { InputProps } from '../../types/ui/inputTypes';
+import { InputTypes } from '../types/InputProps';
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.forwardRef<HTMLInputElement, InputTypes>(
   ({ className, icon, ...props }, ref) => {
     return (
       <div className={clsx(styles.inputWrapper)}>

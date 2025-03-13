@@ -1,14 +1,13 @@
-// Button.tsx
 import React from 'react';
 import clsx from 'clsx';
 import styles from './Button.module.scss';
 
-type ButtonVariant = 'primary' | 'icon'; // Добавляем вариант для иконки
+type ButtonVariant = 'primary' | 'icon';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  icon?: React.ReactNode; // Пропс для иконки
-  iconPosition?: 'left' | 'right'; // Позиция иконки
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 const Button: React.FC<ButtonProps> = ({

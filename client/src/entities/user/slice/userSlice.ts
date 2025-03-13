@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserSliceState } from '../../../features/auth/types/userSliceTypes';
+import { UserSliceState } from '../types/userSliceTypes';
 import { removeItem } from '../../../shared/utils/storage';
 
 const initialState: UserSliceState = {

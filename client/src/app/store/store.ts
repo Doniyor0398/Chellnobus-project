@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../../features/auth/slices/authSlice';
 import userReducer from '../../entities/user/slice/userSlice';
 import registerReducer from '../../features/auth/slices/registerSlice';
+import driverReducer from '../../entities/driver/slice/driverSlice';
 import {
   persistStore,
   persistReducer,
@@ -34,6 +35,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     user: persistedUserReducer,
     register: registerReducer,
+    driver: driverReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

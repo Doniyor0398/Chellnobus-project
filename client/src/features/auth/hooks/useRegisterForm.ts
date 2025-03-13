@@ -3,6 +3,7 @@ import { RegisterFormTypes } from '../types/registerFormTypes';
 import { loginUser, registerUser } from '../..//auth/api/userAuthApi';
 import { setAuthToken } from '../slices/authSlice';
 import { useAuthForm } from './useAuthForm';
+import { setItem } from '../../../shared/utils/storage';
 
 export const useRegisterForm = () => {
   const {
@@ -36,7 +37,7 @@ export const useRegisterForm = () => {
         const loginResponse = await loginUser(data.email, data.password);
 
         if (loginResponse.token) {
-          localStorage.setItem('authToken', loginResponse.token);
+          setItem('authToken', loginResponse.token);
           dispatch(setAuthToken(loginResponse.token));
           navigate('/');
         } else {

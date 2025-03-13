@@ -64,7 +64,7 @@ const registerSlice = createSlice({
           state.error = null;
           removeItem('registerToken');
           setItem('registerToken', action.payload);
-          localStorage.setItem('authToken', action.payload);
+          setItem('authToken', action.payload);
         },
       )
       .addCase(registerUserThunk.rejected, (state, action) => {
