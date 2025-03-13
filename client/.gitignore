@@ -57,3 +57,5 @@ next-env.d.ts
 # IDE/Editor           #
 # ==================== #
 .vscode/node_modules/
+node_modules/
+node_modules/
