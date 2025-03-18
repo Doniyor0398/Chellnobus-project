@@ -53,7 +53,7 @@ export const Dashboard: React.FC = () => {
       case '/users':
         return 'Пользователи';
       default:
-        return 'Водители';
+        return 'Главная';
     }
   };
 
@@ -100,47 +100,54 @@ export const Dashboard: React.FC = () => {
             boxSizing: 'border-box',
             backgroundColor: '#424242',
             color: '#ffff',
+            display: 'flex',
+            flexDirection: 'column',
           },
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/">
-              <Route sx={{ mr: 2 }} />
-              <ListItemText primary="Водители" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/change">
-              <Schedule sx={{ mr: 2 }} />
-              <ListItemText primary="Смена" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/orders">
-              <DirectionsCar sx={{ mr: 2 }} />
-              <ListItemText primary="Заказы" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/users">
-              <AccountCircleIcon sx={{ mr: 2 }} />
-              <ListItemText primary="Пользователи" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={handleLogout}>
-              <ExitToApp sx={{ mr: 2 }} />
-              <ListItemText primary="Выйти" />
-            </ListItemButton>
-          </ListItem>
-        </List>
+        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/">
+                <Route sx={{ mr: 2 }} />
+                <ListItemText primary="Водители" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/change">
+                <Schedule sx={{ mr: 2 }} />
+                <ListItemText primary="Смена" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/orders">
+                <DirectionsCar sx={{ mr: 2 }} />
+                <ListItemText primary="Заказы" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/users">
+                <AccountCircleIcon sx={{ mr: 2 }} />
+                <ListItemText primary="Пользователи" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
+        </Box>
+
+        <Box sx={{ p: 1 }}>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogout}>
+                <ExitToApp sx={{ mr: 2 }} />
+                <ListItemText primary="Выйти" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
       </Drawer>
 
       <Box
