@@ -8,10 +8,10 @@ import Input from '../../../../shared/ui/Input/Input';
 import { useRegisterForm } from '../../hooks/useRegisterForm';
 import styles from './RegisterForm.module.scss';
 
-import IconUser from '../../../../assets/icon/user.svg';
-import IconEmail from '../../../../assets/icon/mail.svg';
-import noHidden from '../../../../assets/icon/no-hidden.svg';
-import hidden from '../../../../assets/icon/hidden.svg';
+import IconUser from '../../../../app/assets/icon/user.svg';
+import IconEmail from '../../../../app/assets/icon/mail.svg';
+import noHidden from '../../../../app/assets/icon/no-hidden.svg';
+import hidden from '../../../../app/assets/icon/hidden.svg';
 import { handleRegister } from '../../api/handleRegister';
 import FormError from '../FormError/FormError';
 

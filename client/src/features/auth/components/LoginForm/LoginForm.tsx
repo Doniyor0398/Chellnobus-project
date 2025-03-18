@@ -9,9 +9,9 @@ import styles from './LoginForm.module.scss';
 import Button from '../../../../shared/ui/Button/Button';
 import Input from '../../../../shared/ui/Input/Input';
 
-import IconUser from '../../../../assets/icon/mail.svg';
-import noHidden from '../../../../assets/icon/no-hidden.svg';
-import hidden from '../../../../assets/icon/hidden.svg';
+import IconUser from '../../../../app/assets/icon/mail.svg';
+import noHidden from '../../../../app/assets/icon/no-hidden.svg';
+import hidden from '../../../../app/assets/icon/hidden.svg';
 
 import { handleLogin } from '../../api/handleLogin';
 import FormError from '../FormError/FormError';
