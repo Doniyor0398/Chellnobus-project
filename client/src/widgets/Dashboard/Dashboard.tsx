@@ -16,7 +16,6 @@ import {
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import {
-  Home,
   Schedule,
   Route,
   DirectionsCar,
@@ -46,17 +45,15 @@ export const Dashboard: React.FC = () => {
   const getTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Главная';
+        return 'Водители';
       case '/change':
         return 'Смена';
-      case '/drivers':
-        return 'Водители';
       case '/orders':
         return 'Заказы';
       case '/users':
         return 'Пользователи';
       default:
-        return 'Главная';
+        return 'Водители';
     }
   };
 
@@ -111,52 +108,47 @@ export const Dashboard: React.FC = () => {
         anchor="left"
         open={open}
       >
-        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/">
-                <Home sx={{ mr: 2 }} />
-                <ListItemText primary="Главная" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/change">
-                <Schedule sx={{ mr: 2 }} />
-                <ListItemText primary="Смена" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/drivers">
-                <Route sx={{ mr: 2 }} />
-                <ListItemText primary="Водители" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/orders">
-                <DirectionsCar sx={{ mr: 2 }} />
-                <ListItemText primary="Заказы" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/users">
-                <AccountCircleIcon sx={{ mr: 2 }} />
-                <ListItemText primary="Пользователи" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Divider />
-        </Box>
-
-        <Box sx={{ p: 1 }}>
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleLogout}>
-                <ExitToApp sx={{ mr: 2 }} />
-                <ListItemText primary="Выйти" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/">
+              <Home sx={{ mr: 2 }} />
+              <ListItemText primary="Главная" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/change">
+              <Schedule sx={{ mr: 2 }} />
+              <ListItemText primary="Смена" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/drivers">
+              <Route sx={{ mr: 2 }} />
+              <ListItemText primary="Водители" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/orders">
+              <DirectionsCar sx={{ mr: 2 }} />
+              <ListItemText primary="Заказы" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/users">
+              <AccountCircleIcon sx={{ mr: 2 }} />
+              <ListItemText primary="Пользователи" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ExitToApp sx={{ mr: 2 }} />
+              <ListItemText primary="Выйти" />
+            </ListItemButton>
+          </ListItem>
+        </List>
       </Drawer>
 
       <Box
