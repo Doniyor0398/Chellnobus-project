@@ -13,9 +13,9 @@ const AppRouter: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />}>
-        <Route index element={<HomePage />} />
-        <Route path="/change" element={<Change />} />
+        {/* <Route index element={<HomePage />} /> */}
         <Route path="/drivers" element={<Drivers />} />
+        <Route path="/change" element={<Change />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/users" element={<Users />} />
       </Route>

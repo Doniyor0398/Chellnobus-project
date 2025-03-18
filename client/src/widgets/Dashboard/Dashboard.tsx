@@ -16,7 +16,6 @@ import {
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import {
-  Home,
   Schedule,
   Route,
   DirectionsCar,
@@ -112,20 +111,14 @@ export const Dashboard: React.FC = () => {
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/">
-              <Home sx={{ mr: 2 }} />
-              <ListItemText primary="Главная" />
+              <Route sx={{ mr: 2 }} />
+              <ListItemText primary="Водители" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/change">
               <Schedule sx={{ mr: 2 }} />
               <ListItemText primary="Смена" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/drivers">
-              <Route sx={{ mr: 2 }} />
-              <ListItemText primary="Водители" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
