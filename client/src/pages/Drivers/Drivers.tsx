@@ -10,15 +10,31 @@ import DriverTable from '../../features/driver/components/DriverTable';
 import { Button, Modal, Box, Typography, Alert } from '@mui/material';
 import { useToggle } from '../../shared/hooks/useToggle';
 import AddDriver from '../../features/driver/components/AddDriver';
+import { useAuth } from '../../features/auth/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export const Drivers = () => {
+  const { isAuth } = useAuth();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { drivers, loading, error } = useAppSelector((state) => state.driver);
   const [isModalOpen, toggleModal] = useToggle(false);
 
   useEffect(() => {
-    dispatch(fetchDriversThunk());
-  }, [dispatch]);
+    if (!isAuth) {
+      navigate('/login');
+    }
+  }, [isAuth, navigate]);
+
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(fetchDriversThunk());
+    }
+  }, [dispatch, isAuth]);
+
+  if (!isAuth) {
+    return null;
+  }
 
   return (
     <div>

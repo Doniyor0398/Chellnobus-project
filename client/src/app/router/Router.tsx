@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import HomePage from '../../pages/Home/Home';
 import LoginPage from '../../pages/Login/LoginPage';
 import RegisterPage from '../../pages/Register/RegisterPage';
 import Dashboard from '../../widgets/Dashboard/Dashboard';
@@ -13,7 +12,7 @@ const AppRouter: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />}>
-        {/* <Route index element={<HomePage />} /> */}
+        <Route index element={<Drivers />} />
         <Route path="/drivers" element={<Drivers />} />
         <Route path="/change" element={<Change />} />
         <Route path="/orders" element={<Orders />} />

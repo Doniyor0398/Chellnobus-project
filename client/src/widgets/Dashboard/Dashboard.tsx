@@ -45,17 +45,15 @@ export const Dashboard: React.FC = () => {
   const getTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Главная';
+        return 'Водители';
       case '/change':
         return 'Смена';
-      case '/drivers':
-        return 'Водители';
       case '/orders':
         return 'Заказы';
       case '/users':
         return 'Пользователи';
       default:
-        return 'Главная';
+        return 'Водители';
     }
   };
 
