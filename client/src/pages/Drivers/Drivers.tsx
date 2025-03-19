@@ -37,7 +37,7 @@ export const Drivers = () => {
   }
 
   return (
-    <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box
         sx={{
           display: 'flex',
@@ -57,6 +57,11 @@ export const Drivers = () => {
       {loading && <Typography>Загрузка...</Typography>}
       {error && <Alert severity="error">{error}</Alert>}
 
+      {/* Таблица и пагинация */}
+      <Box sx={{ flexGrow: 1 }}>
+        <DriverTable data={drivers} />
+      </Box>
+
       <Modal
         open={isModalOpen}
         onClose={toggleModal}
@@ -70,8 +75,6 @@ export const Drivers = () => {
           <AddDriver onClose={toggleModal} />
         </Box>
       </Modal>
-
-      <DriverTable data={drivers} />
-    </div>
+    </Box>
   );
 };
