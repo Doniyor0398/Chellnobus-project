@@ -30,7 +30,10 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
     setPage(newPage);
   };
 
-  const themeForTableCell = { color: '#9E9E9E', fontWeight: 'bold' };
+  const themeForTableCell = {
+    color: '#9E9E9E',
+    fontWeight: 'bold',
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

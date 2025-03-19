@@ -9,6 +9,7 @@ import {
   Typography,
   Box,
   Alert,
+  Snackbar,
 } from '@mui/material';
 import { fetchDriversThunk } from '../../../entities/driver/thunks/fetchDrivers';
 
@@ -27,6 +28,7 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
   const [vehicleLicensePlate, setVehicleLicensePlate] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,8 +57,10 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
       setVehicleName('');
       setVehicleLicensePlate('');
       setError(null);
-      alert('Водитель успешно добавлен!');
-      onClose();
+      setSuccessMessage(true);
+      setTimeout(() => {
+        onClose();
+      }, 500);
     } catch (err) {
       setError('Ошибка при добавлении водителя');
       console.error('Ошибка при добавлении водителя:', err);
@@ -173,6 +177,17 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
           )}
         </form>
       </Box>
+
+      <Snackbar
+        open={successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSuccessMessage(false)} severity="success">
+          Водитель успешно добавлен!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
