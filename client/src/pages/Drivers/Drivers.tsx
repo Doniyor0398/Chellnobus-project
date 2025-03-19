@@ -7,7 +7,14 @@ import {
 import { fetchDriversThunk } from '../../entities/driver/thunks/fetchDrivers';
 
 import DriverTable from '../../features/driver/components/DriverTable';
-import { Button, Modal, Box, Typography, Alert } from '@mui/material';
+import {
+  Button,
+  Modal,
+  Box,
+  Typography,
+  Alert,
+  CircularProgress,
+} from '@mui/material';
 import { useToggle } from '../../shared/hooks/useToggle';
 import AddDriver from '../../features/driver/components/AddDriver';
 import { useAuth } from '../../features/auth/hooks/useAuth';
@@ -54,10 +61,18 @@ export const Drivers = () => {
         </Button>
       </Box>
 
-      {loading && <Typography>Загрузка...</Typography>}
+      {loading && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="200px"
+        >
+          <CircularProgress size={60} />
+        </Box>
+      )}
       {error && <Alert severity="error">{error}</Alert>}
 
-      {/* Таблица и пагинация */}
       <Box sx={{ flexGrow: 1 }}>
         <DriverTable data={drivers} />
       </Box>
