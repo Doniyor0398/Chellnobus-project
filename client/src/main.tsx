@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './app/App';
 import { store, persistor } from './app/store/store';
 import './firebase';
-import LoadingIndicator from './widgets/Dashboard/LoadingIndicator';
+import LoadingIndicator from './widgets/LoadingIndicator';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

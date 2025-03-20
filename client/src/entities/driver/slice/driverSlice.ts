@@ -1,7 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchDriversThunk } from '../thunks/fetchDrivers';
 import { Driver } from '../types/driverTypes';
 import { addDriverThunk } from '../thunks/addDriverThunk';
+import { deleteDriverThunk } from '../thunks/deleteDriverThunk';
 
 interface DriverState {
   drivers: Driver[];
@@ -25,17 +26,28 @@ const driverSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchDriversThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.drivers = action.payload;
-      })
+      .addCase(
+        fetchDriversThunk.fulfilled,
+        (state, action: PayloadAction<Driver[]>) => {
+          state.loading = false;
+          state.drivers = action.payload;
+        },
+      )
       .addCase(fetchDriversThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Ошибка при загрузке водителей';
       })
       .addCase(addDriverThunk.fulfilled, (state, action) => {
         state.drivers.push(action.payload);
-      });
+      })
+      .addCase(
+        deleteDriverThunk.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.drivers = state.drivers.filter(
+            (driver) => driver.id !== action.payload,
+          );
+        },
+      );
   },
 });
 
@@ -47,4 +59,3 @@ export const selectLoading = (state: { driver: DriverState }) =>
   state.driver.loading;
 export const selectError = (state: { driver: DriverState }) =>
   state.driver.error;
-

@@ -8,15 +8,20 @@ import {
   Paper,
   Pagination,
   Box,
+  Button,
 } from '@mui/material';
 import { Driver } from '../../../entities/driver/types/driverTypes';
 import { useState } from 'react';
+import { deleteDriverThunk } from '../../../entities/driver/thunks/deleteDriverThunk';
+import { useAppDispatch } from '../../../shared/hooks/useAppDispatch';
 
 interface DriverTableProps {
   data: Driver[];
 }
 
 const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
+  const dispatch = useAppDispatch();
+
   const [page, setPage] = useState(1);
   const itemsPerPage = 13;
 
@@ -26,16 +31,19 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
 
   const emptyRows = itemsPerPage - currentData.length;
 
+  // для удаление водителей
+  const handleDelete = (driverId: string) => {
+    dispatch(deleteDriverThunk(driverId));
+  };
+
   const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
-
 
   const themeForTableCell = {
     color: '#9E9E9E',
     fontWeight: 'bold',
   };
-
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -50,6 +58,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
               <TableCell sx={themeForTableCell}>ТС</TableCell>
               <TableCell sx={themeForTableCell}>Госномер</TableCell>
               <TableCell sx={themeForTableCell}>Перерыв</TableCell>
+              <TableCell sx={themeForTableCell}>Дейтвия</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,6 +71,15 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
                 <TableCell>{driver.vehicle.name}</TableCell>
                 <TableCell>{driver.vehicle.licensePlate}</TableCell>
                 <TableCell>{driver.break.join(', ')}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => handleDelete(driver.id)}
+                    color="error"
+                    variant="contained"
+                  >
+                    Удалить
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
 

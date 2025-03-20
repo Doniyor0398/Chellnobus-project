@@ -23,6 +23,7 @@ import {
   ChevronLeft as ChevronLeftIcon,
   AccountCircle as AccountCircleIcon,
   ExitToApp,
+  Person,
 } from '@mui/icons-material';
 
 const drawerWidth = 256;
@@ -30,7 +31,7 @@ const drawerWidth = 256;
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuth } = useAuth();
+  const { isAuth, name } = useAuth();
 
   const [open, setOpen] = useState(true);
 
@@ -137,12 +138,21 @@ export const Dashboard: React.FC = () => {
           </List>
           <Divider />
         </Box>
-
-        <Box sx={{ p: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '8px 16px',
+            background: 'green;',
+          }}
+        >
+          <Person sx={{ mr: 1 }} />
+          {name}
+        </Box>
+        <Box>
           <List>
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ background: 'red' }}>
               <ListItemButton onClick={handleLogout}>
-                <ExitToApp sx={{ mr: 2 }} />
+                <ExitToApp sx={{ mr: 1 }} />
                 <ListItemText primary="Выйти" />
               </ListItemButton>
             </ListItem>
