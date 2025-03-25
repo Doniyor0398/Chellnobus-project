@@ -17,13 +17,14 @@ import { useAppDispatch } from '../../../shared/hooks/useAppDispatch';
 
 interface DriverTableProps {
   data: Driver[];
+  onDeleteSuccess: () => void;
 }
 
-const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
+const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
   const dispatch = useAppDispatch();
 
   const [page, setPage] = useState(1);
-  const itemsPerPage = 13;
+  const itemsPerPage = 10;
 
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -31,9 +32,13 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
 
   const emptyRows = itemsPerPage - currentData.length;
 
-  // для удаление водителей
-  const handleDelete = (driverId: string) => {
-    dispatch(deleteDriverThunk(driverId));
+  const handleDelete = async (driverId: string) => {
+    try {
+      await dispatch(deleteDriverThunk(driverId)).unwrap();
+      onDeleteSuccess();
+    } catch (error) {
+      console.error('Ошибка при удалении водителя:', error);
+    }
   };
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
@@ -46,7 +51,12 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <TableContainer component={Paper} sx={{ flexGrow: 1 }}>
         <Table>
           <TableHead>
@@ -85,7 +95,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data }) => {
 
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={7} />
+                <TableCell colSpan={0} />
               </TableRow>
             )}
           </TableBody>

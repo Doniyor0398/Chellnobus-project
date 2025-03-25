@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import EmojiPeopleSharpIcon from '@mui/icons-material/EmojiPeopleSharp';
 import {
   useAppDispatch,
   useAppSelector,
@@ -13,6 +14,7 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  Snackbar,
 } from '@mui/material';
 import { useToggle } from '../../shared/hooks/useToggle';
 import AddDriver from '../../features/driver/components/AddDriver';
@@ -25,6 +27,7 @@ export const Drivers = () => {
   const dispatch = useAppDispatch();
   const { drivers, loading, error } = useAppSelector((state) => state.driver);
   const [isModalOpen, toggleModal] = useToggle(false);
+  const [successMessage, setSuccessMessage] = useState(false);
 
   useEffect(() => {
     if (!isAuth) {
@@ -52,8 +55,29 @@ export const Drivers = () => {
           mb: 2,
         }}
       >
-        <Typography variant="h4" component="h1">
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           Водители
+          <Box
+            sx={{
+              border: '1px solid green',
+              borderRadius: '10px',
+              width: '70px',
+              background: '#1976d2',
+              color: 'white',
+              ml: 1,
+            }}
+          >
+            <EmojiPeopleSharpIcon sx={{ mr: 1 }} />
+            {drivers.length}
+          </Box>
         </Typography>
         <Button variant="contained" color="primary" onClick={toggleModal}>
           Добавить водителя
@@ -73,7 +97,10 @@ export const Drivers = () => {
       {error && <Alert severity="error">{error}</Alert>}
 
       <Box sx={{ flexGrow: 1 }}>
-        <DriverTable data={drivers} />
+        <DriverTable
+          data={drivers}
+          onDeleteSuccess={() => setSuccessMessage(true)}
+        />
       </Box>
 
       <Modal
@@ -89,6 +116,17 @@ export const Drivers = () => {
           <AddDriver onClose={toggleModal} />
         </Box>
       </Modal>
+
+      <Snackbar
+        open={successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSuccessMessage(false)} severity="success">
+          Водитель успешно удален!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

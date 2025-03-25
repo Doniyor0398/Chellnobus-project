@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL =
-  'https://auth-face-api-default-rtdb.asia-southeast1.firebasedatabase.app/9';
+  'https://auth-face-api-default-rtdb.asia-southeast1.firebasedatabase.app/chelnobus/v1';
 
 export interface Vehicle {
   name: string;
