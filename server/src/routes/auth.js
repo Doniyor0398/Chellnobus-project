@@ -16,11 +16,12 @@ async function loginUser(req, reply) {
     const token = req.server.jwt.sign({
       id: user._id,
       email: user.email,
+      role: user.role
     });
 
     return reply.code(200).send({
       message: 'Вход выполнен',
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
       token,
     });
   } catch (error) {

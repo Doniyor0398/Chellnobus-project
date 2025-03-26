@@ -39,11 +39,12 @@ async function createUser(req, reply) {
     const token = req.server.jwt.sign({
       id: newUser._id,
       email: newUser.email,
+      role: newUser.role
     });
 
     return reply.status(201).send({
       message: 'Пользователь создан',
-      user: { id: newUser._id, name: newUser.name, email: newUser.email },
+      user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role },
       token,
     });
   } catch (error) {
@@ -74,7 +75,7 @@ async function updateUser(req, reply) {
 
     return reply.code(200).send({
       message: 'Данные пользователя обновлены',
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (error) {
     console.error(error);
