@@ -1,11 +1,10 @@
-const fastify = require('fastify')
-const authRoutes = require('../routes/auth')
-const userRoutes = require('../routes/user')
+// src/config/routesConfig.js
+const authRoutes = require('../routes/auth');
+const userRoutes = require('../routes/user');
 
-const app = fastify()
+async function routes(fastify, options) {
+  fastify.register(authRoutes, { prefix: '/api/auth' });
+  fastify.register(userRoutes, { prefix: '/api/user' });
+}
 
-
-app.register(authRoutes, {prefix: '/api/auth'})
-app.register(userRoutes, {prefix: '/api/user'})
-
-module.exports = app
+module.exports = routes;

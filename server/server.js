@@ -1,13 +1,24 @@
 require('dotenv').config();
-const fastify = require('fastyfy')({ logger: true });
+const fastify = require('fastify')();
+// const fastify = require('fastify')({ logger: true });
 const fastifyJWT = require('fastify-jwt');
+const fastifyCookie = require('@fastify/cookie');
 const connectDB = require('./src/config/dbConfig');
-const routes = require('./src/config/routes');
-
+const routes = require('./src/config/routesConfig');
 
 fastify.register(fastifyJWT, {
-    secret: process.env.JWT_SECRET || 'your-secret-key',
-  });
+  secret: process.env.JWT_SECRET || 'your-secret-key',
+});
+fastify.decorate('authenticate', async function (req, reply) {
+  try {
+    const decoded = await req.jwtVerify();
+    req.user = decoded;
+    // console.log('---------------------------------------------------------------------------------------',decoded);
+  } catch (err) {
+    reply.send(new Error('Неавторизованный доступ'));
+  }
+});
+fastify.register(fastifyCookie);
 
 const PORT = process.env.PORT || 3000;
 
