@@ -109,13 +109,13 @@ async function deleteUser(req, reply) {
 }
 
 async function userRoutes(fastify, opts) {
-  fastify.post('/', { schema: createUserSchema }, createUser);
+  fastify.post('/create', { schema: createUserSchema }, createUser);
   fastify.put(
-    '/',
+    '/edit',
     { preHandler: [fastify.authenticate], schema: updateUserSchema },
     updateUser
   );
-  fastify.delete('/', { preHandler: [fastify.authenticate] }, deleteUser);
+  fastify.delete('/delete', { preHandler: [fastify.authenticate] }, deleteUser);
 }
 
 module.exports = userRoutes;
