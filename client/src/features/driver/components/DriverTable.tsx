@@ -12,6 +12,7 @@ import {
   Button,
 } from '@mui/material';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Driver } from '../../../entities/driver/types/driverTypes';
 import { useState } from 'react';
@@ -92,6 +93,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
               <TableCell sx={themeForTableCell}>Дейтвия</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {currentData.length > 0 ? (
               currentData.map((driver) => (
