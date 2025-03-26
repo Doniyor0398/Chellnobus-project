@@ -8,8 +8,12 @@ import {
   Paper,
   Pagination,
   Box,
+  Typography,
   Button,
 } from '@mui/material';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Driver } from '../../../entities/driver/types/driverTypes';
 import { useState } from 'react';
 import { deleteDriverThunk } from '../../../entities/driver/thunks/deleteDriverThunk';
@@ -50,11 +54,29 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
     fontWeight: 'bold',
   };
 
+  const editButtonStyles = {
+    border: '1px solid',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'primary.main',
+    borderRadius: '10px',
+    mr: 1.5,
+    p: 1,
+    '&:hover': {
+      backgroundColor: 'primary.light',
+      color: 'white',
+      borderColor: 'primary.dark',
+    },
+    '& svg': { fontSize: '20px' },
+  };
+
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        height: '100%',
       }}
     >
       <TableContainer component={Paper} sx={{ flexGrow: 1 }}>
@@ -71,38 +93,76 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
               <TableCell sx={themeForTableCell}>Дейтвия</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {currentData.map((driver) => (
-              <TableRow key={driver.id}>
-                <TableCell>{driver.name}</TableCell>
-                <TableCell>{driver.phone}</TableCell>
-                <TableCell>{driver.schedule}</TableCell>
-                <TableCell>{driver.shift}</TableCell>
-                <TableCell>{driver.vehicle.name}</TableCell>
-                <TableCell>{driver.vehicle.licensePlate}</TableCell>
-                <TableCell>{driver.break.join(', ')}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => handleDelete(driver.id)}
-                    color="error"
-                    variant="contained"
+            {currentData.length > 0 ? (
+              currentData.map((driver) => (
+                <TableRow key={driver.id}>
+                  <TableCell>{driver.name}</TableCell>
+                  <TableCell>{driver.phone}</TableCell>
+                  <TableCell>{driver.schedule}</TableCell>
+                  <TableCell>{driver.shift}</TableCell>
+                  <TableCell>{driver.vehicle.name}</TableCell>
+                  <TableCell>{driver.vehicle.licensePlate}</TableCell>
+                  <TableCell>{driver.break.join(', ')}</TableCell>
+                  <TableCell
+                    sx={{
+                      display: 'flex',
+                      alignContent: 'center',
+                    }}
                   >
-                    Удалить
-                  </Button>
+                    <Button
+                      sx={{
+                        editButtonStyles,
+                        minWidth: '20px',
+                      }}
+                    >
+                      <EditOutlinedIcon />
+                    </Button>
+                    <Button
+                      sx={{
+                        editButtonStyles,
+                        color: 'Red',
+                      }}
+                    >
+                      <DeleteForeverOutlinedIcon
+                        onClick={() => handleDelete(driver.id)}
+                      />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={10} align="center" sx={{ py: 41 }}>
+                  <Typography variant="body1" color="textSecondary">
+                    Нет данных
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
+            )}
 
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={0} />
+            {emptyRows > 0 && currentData.length > 0 && (
+              <TableRow style={{ height: 67 * emptyRows }}>
+                <TableCell colSpan={11} />
               </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          pt: 2,
+          pb: 1,
+          position: 'sticky',
+          bottom: 0,
+          backgroundColor: 'background.paper',
+          zIndex: 1,
+        }}
+      >
         <Pagination
           count={Math.ceil(data.length / itemsPerPage)}
           page={page}

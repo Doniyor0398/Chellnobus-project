@@ -3,6 +3,7 @@ import { fetchDriversThunk } from '../thunks/fetchDrivers';
 import { Driver } from '../types/driverTypes';
 import { addDriverThunk } from '../thunks/addDriverThunk';
 import { deleteDriverThunk } from '../thunks/deleteDriverThunk';
+import { editDriverThunk } from '../thunks/editDriverThunk';
 
 interface DriverState {
   drivers: Driver[];
@@ -46,6 +47,17 @@ const driverSlice = createSlice({
           state.drivers = state.drivers.filter(
             (driver) => driver.id !== action.payload,
           );
+        },
+      )
+      .addCase(
+        editDriverThunk.fulfilled,
+        (state, action: PayloadAction<Driver>) => {
+          const index = state.drivers.findIndex(
+            (d) => d.id === action.payload.id,
+          );
+          if (index !== -1) {
+            state.drivers[index] = action.payload;
+          }
         },
       );
   },

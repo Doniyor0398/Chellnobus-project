@@ -22,10 +22,10 @@ export interface Driver {
 export const getDrivers = async (): Promise<Driver[]> => {
   try {
     const response = await axios.get(`${API_URL}/drivers.json`);
-    console.log('Response from Firebase:', response.data);
+    console.log('Firebase данные:', response.data);
 
     if (!response.data) {
-      console.warn('No data found in Firebase at /chelnobus/v1/drivers');
+      console.warn('Данные в Firebase в /chelnobus/v1/drivers не найдены');
       return [];
     }
 
