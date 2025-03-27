@@ -10,6 +10,7 @@ import {
   Box,
   Typography,
   Button,
+  Modal,
 } from '@mui/material';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
@@ -18,6 +19,7 @@ import { Driver } from '../../../entities/driver/types/driverTypes';
 import { useState } from 'react';
 import { deleteDriverThunk } from '../../../entities/driver/thunks/deleteDriverThunk';
 import { useAppDispatch } from '../../../shared/hooks/useAppDispatch';
+import EditDriver from './EditDriverModal';
 
 interface DriverTableProps {
   data: Driver[];
@@ -28,6 +30,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
   const dispatch = useAppDispatch();
 
   const [page, setPage] = useState(1);
+  const [editingDriver, setEditingDriver] = useState<Driver | null>(null);
   const itemsPerPage = 10;
 
   const startIndex = (page - 1) * itemsPerPage;
@@ -35,6 +38,19 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
   const currentData = data.slice(startIndex, endIndex);
 
   const emptyRows = itemsPerPage - currentData.length;
+
+  const handleEdit = (driver: Driver) => {
+    setEditingDriver(driver);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditingDriver(null);
+  };
+
+  const handlUpdateSuccess = () => {
+    onDeleteSuccess();
+    handleCloseEditModal();
+  };
 
   const handleDelete = async (driverId: string) => {
     try {
@@ -104,7 +120,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
                   <TableCell>{driver.shift}</TableCell>
                   <TableCell>{driver.vehicle.name}</TableCell>
                   <TableCell>{driver.vehicle.licensePlate}</TableCell>
-                  <TableCell>{driver.break.join(', ')}</TableCell>
+                  <TableCell>{driver.breaks.join(', ')}</TableCell>
                   <TableCell
                     sx={{
                       display: 'flex',
@@ -112,6 +128,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
                     }}
                   >
                     <Button
+                      onClick={() => handleEdit(driver)}
                       sx={{
                         editButtonStyles,
                         minWidth: '20px',
@@ -170,6 +187,34 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
           color="primary"
         />
       </Box>
+
+      <Modal
+        open={!!editingDriver}
+        onClose={handleCloseEditModal}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            padding: 3,
+            borderRadius: 2,
+            width: '600px',
+            maxWidth: '90%',
+          }}
+        >
+          {editingDriver && (
+            <EditDriver
+              driver={editingDriver}
+              onClose={handleCloseEditModal}
+              onSuccess={handlUpdateSuccess}
+            />
+          )}
+        </Box>
+      </Modal>
     </Box>
   );
 };

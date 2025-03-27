@@ -10,5 +10,5 @@ export interface Driver {
   schedule: string;
   shift: string;
   vehicle: Vehicle;
-  break: string[];
+  breaks: string[];
 }

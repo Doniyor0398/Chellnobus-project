@@ -39,7 +39,7 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
       phone,
       schedule,
       shift,
-      break: [breakTime],
+      breaks: [breakTime],
       vehicle: {
         name: vehicleName,
         licensePlate: vehicleLicensePlate,

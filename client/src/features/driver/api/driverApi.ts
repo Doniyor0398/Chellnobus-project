@@ -1,23 +1,8 @@
 import axios from 'axios';
+import { Driver } from '../../../entities/driver/types/driverTypes';
 
 const API_URL =
   'https://auth-face-api-default-rtdb.asia-southeast1.firebasedatabase.app/chelnobus/v1';
-
-export interface Vehicle {
-  name: string;
-  licensePlate: string;
-}
-
-export interface Driver {
-  id: string;
-  name: string;
-  phone: string;
-  schedule: string;
-  shift: string;
-  vehicle: Vehicle;
-  startDate: string;
-  break: string[];
-}
 
 export const getDrivers = async (): Promise<Driver[]> => {
   try {
