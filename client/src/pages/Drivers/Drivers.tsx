@@ -17,7 +17,7 @@ import {
   Snackbar,
 } from '@mui/material';
 import { useToggle } from '../../shared/hooks/useToggle';
-import AddDriver from '../../features/driver/components/AddDriver';
+import AddDriver from '../../features/driver/components/AddDriver/AddDriverForm';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
