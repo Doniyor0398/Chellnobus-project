@@ -93,10 +93,19 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        overflow: 'hidden',
       }}
     >
-      <TableContainer component={Paper} sx={{ flexGrow: 1 }}>
-        <Table>
+      <TableContainer
+        component={Paper}
+        sx={{
+          flex: '1 1 auto',
+          overflow: 'auto',
+          position: 'relative',
+          maxHeight: 'calc(100vh - 200px)',
+        }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell sx={themeForTableCell}>ФИО</TableCell>

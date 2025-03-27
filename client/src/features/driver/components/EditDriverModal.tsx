@@ -118,6 +118,7 @@ const EditDriver: React.FC<EditDriverProps> = ({
           type="submit"
           variant="contained"
           color="primary"
+          fullWidth
         >
           {loading ? '...Сохранение' : 'Сохранить'}
         </Button>
