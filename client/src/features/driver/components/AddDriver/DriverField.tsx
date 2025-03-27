@@ -28,8 +28,9 @@ const DriverField: React.FC<DriverFieldProps> = ({
       sx={{
         '& .MuiFormHelperText-root': {
           visibility: error ? 'visible' : 'hidden',
-          marginTop: 0,
           height: error ? 'auto' : 0,
+          ml: 0,
+          color: 'red',
         },
       }}
     />
