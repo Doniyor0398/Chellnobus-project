@@ -10,12 +10,28 @@ import {
   Box,
   Alert,
   Snackbar,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { fetchDriversThunk } from '../../../entities/driver/thunks/fetchDrivers';
+import { IMaskInput } from 'react-imask';
 
 interface AddDriverProps {
   onClose: () => void;
 }
+
+const scheduleOptions = ['5/2', '2/2', '3/2', '1/1'];
+const shiftOptions = ['День', 'Ночь'];
+const breakOptions = [
+  '12:00-12:30',
+  '13:00-13:30',
+  '14:00-14:30',
+  '15:00-15:30',
+  '16:00-16:30',
+];
+const cars = ['Mers', 'BMW', 'Ford', 'Rols Roys'];
 
 const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
@@ -36,7 +52,7 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
 
     const newDriver: Omit<Driver, 'id'> = {
       name,
-      phone,
+      phone: phone.replace(/\D/g, ''),
       schedule,
       shift,
       breaks: [breakTime],
@@ -112,46 +128,83 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+
           <TextField
             fullWidth
             margin="normal"
             label="Телефон"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            InputProps={{
+              inputComponent: IMaskInput as any,
+              inputProps: {
+                mask: '+7 (000) 000-00-00',
+              },
+            }}
             required
           />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="График"
-            value={schedule}
-            onChange={(e) => setSchedule(e.target.value)}
-            required
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Смена"
-            value={shift}
-            onChange={(e) => setShift(e.target.value)}
-            required
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Перерыв"
-            value={breakTime}
-            onChange={(e) => setBreakTime(e.target.value)}
-            required
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Название ТС"
-            value={vehicleName}
-            onChange={(e) => setVehicleName(e.target.value)}
-            required
-          />
+
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>График</InputLabel>
+            <Select
+              value={schedule}
+              onChange={(e) => setSchedule(e.target.value)}
+              label="График"
+            >
+              {scheduleOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Смена</InputLabel>
+            <Select
+              value={shift}
+              onChange={(e) => setShift(e.target.value)}
+              label="Смена"
+            >
+              {shiftOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Перерыв</InputLabel>
+            <Select
+              value={breakTime}
+              onChange={(e) => setBreakTime(e.target.value)}
+              label="Перерыв"
+            >
+              {breakOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Название ТС</InputLabel>
+
+            <Select
+              value={vehicleName}
+              onChange={(e) => setVehicleName(e.target.value)}
+              label="Название ТС"
+            >
+              {cars.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <TextField
             fullWidth
             margin="normal"
