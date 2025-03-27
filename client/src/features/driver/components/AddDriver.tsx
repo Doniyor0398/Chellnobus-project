@@ -45,6 +45,18 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\s/g, ''); // Remove spaces
+    setName(value);
+
+    if (value.length < 3 || value.length > 20) {
+      setNameError('Имя должно быть от 3 до 20 символов');
+    } else {
+      setNameError(null);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,8 +137,20 @@ const AddDriver: React.FC<AddDriverProps> = ({ onClose }) => {
             margin="normal"
             label="Имя"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             required
+            inputProps={{
+              minLength: 3,
+              maxLength: 20,
+            }}
+            helperText={nameError ? 'Имя должно быть от 3 до 20 символов' : ' '}
+            sx={{
+              '& .MuiFormHelperText-root': {
+                visibility: nameError ? 'visible' : 'hidden',
+                marginTop: 0,
+                height: nameError ? 'auto' : 0,
+              },
+            }}
           />
 
           <TextField
