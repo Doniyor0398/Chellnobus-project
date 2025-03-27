@@ -27,7 +27,7 @@ export const Drivers = () => {
   const dispatch = useAppDispatch();
   const { drivers, loading, error } = useAppSelector((state) => state.driver);
   const [isModalOpen, toggleModal] = useToggle(false);
-  const [successMessage, setSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuth) {
@@ -99,7 +99,8 @@ export const Drivers = () => {
       <Box sx={{ flexGrow: 1 }}>
         <DriverTable
           data={drivers}
-          onDeleteSuccess={() => setSuccessMessage(true)}
+          onDeleteSuccess={() => setSuccessMessage('Водитель успешно удален!')}
+          onEditSuccess={() => setSuccessMessage('Водитель успешно изменен!')}
         />
       </Box>
 
@@ -118,13 +119,13 @@ export const Drivers = () => {
       </Modal>
 
       <Snackbar
-        open={successMessage}
+        open={!!successMessage}
         autoHideDuration={3000}
-        onClose={() => setSuccessMessage(false)}
+        onClose={() => setSuccessMessage(null)}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={() => setSuccessMessage(false)} severity="success">
-          Водитель успешно удален!
+        <Alert onClose={() => setSuccessMessage(null)} severity="success">
+          {successMessage}
         </Alert>
       </Snackbar>
     </Box>

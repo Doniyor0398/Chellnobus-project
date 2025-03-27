@@ -19,14 +19,19 @@ import { Driver } from '../../../entities/driver/types/driverTypes';
 import { useState } from 'react';
 import { deleteDriverThunk } from '../../../entities/driver/thunks/deleteDriverThunk';
 import { useAppDispatch } from '../../../shared/hooks/useAppDispatch';
-import EditDriver from './EditDriverModal';
+import EditDriver from './EditDriver/EditDriverModal';
 
 interface DriverTableProps {
   data: Driver[];
   onDeleteSuccess: () => void;
+  onEditSuccess: () => void;
 }
 
-const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
+const DriverTable: React.FC<DriverTableProps> = ({
+  data,
+  onDeleteSuccess,
+  onEditSuccess,
+}) => {
   const dispatch = useAppDispatch();
 
   const [page, setPage] = useState(1);
@@ -48,7 +53,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
   };
 
   const handlUpdateSuccess = () => {
-    onDeleteSuccess();
+    onEditSuccess();
     handleCloseEditModal();
   };
 
