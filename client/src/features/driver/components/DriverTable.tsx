@@ -139,7 +139,7 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
                     <Button
                       onClick={() => handleEdit(driver)}
                       sx={{
-                        editButtonStyles,
+                        ...editButtonStyles,
                         minWidth: '20px',
                       }}
                     >
@@ -147,7 +147,8 @@ const DriverTable: React.FC<DriverTableProps> = ({ data, onDeleteSuccess }) => {
                     </Button>
                     <Button
                       sx={{
-                        editButtonStyles,
+                        ...editButtonStyles,
+                        minWidth: '20px',
                         color: 'Red',
                       }}
                     >
