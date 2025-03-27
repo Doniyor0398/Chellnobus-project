@@ -26,7 +26,7 @@ import {
   Person,
 } from '@mui/icons-material';
 
-const drawerWidth = 256;
+const drawerWidth = 215;
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
