@@ -1,5 +1,21 @@
-import React from 'react';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Button,
+  Typography,
+  Snackbar,
+  Paper,
+  Container,
+  TextField,
+} from '@mui/material';
+import DriverField from '../AddDriver/DriverField';
+import DriverSelect from '../AddDriver/DriverSelect';
+import {
+  scheduleOptions,
+  shiftOptions,
+  cars,
+} from '../../constants/driverOptions';
+import MaskedInput from '../../../../shared/ui/MaskedInput';
 import { Driver } from '../../../../entities/driver/types/driverTypes';
 import { DriverFormData } from '../../types';
 
@@ -18,64 +34,181 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
   formData,
   error,
   isSubmitting,
-  isChanged,
   onFieldChange,
   onSubmit,
+  onClose,
 }) => {
-  const fields = [
-    { label: 'ФИО', field: 'name' as const, value: formData.name },
-    { label: 'Телефон', field: 'phone' as const, value: formData.phone },
-    { label: 'График', field: 'schedule' as const, value: formData.schedule },
-    { label: 'Смена', field: 'shift' as const, value: formData.shift },
-    {
-      label: 'Транспортное средство',
-      field: 'vehicleName' as const,
-      value: formData.vehicleName,
-    },
-    {
-      label: 'Госномер',
-      field: 'vehicleLicensePlate' as const,
-      value: formData.vehicleLicensePlate,
-    },
-    {
-      label: 'Перерывы (через запятую)',
-      field: 'breaks' as const,
-      value: formData.breaks,
-    },
-  ];
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState(false);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\s/g, '');
+    onFieldChange('name', value);
+
+    if (value.length < 3 || value.length > 20) {
+      setNameError('Имя должно быть от 3 до 20 символов');
+    } else {
+      setNameError(null);
+    }
+  };
 
   return (
-    <Box component="form" onSubmit={onSubmit} sx={{ p: 2 }}>
-      <Typography variant="h5" gutterBottom>
-        Редактировать водителя
-      </Typography>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      {fields.map(({ label, field, value }) => (
-        <TextField
-          key={field}
-          fullWidth
-          margin="normal"
-          label={label}
-          value={value}
-          onChange={(e) => onFieldChange(field, e.target.value)}
-        />
-      ))}
-
-      <Button
-        type="submit"
-        variant="contained"
-        fullWidth
-        disabled={!isChanged || isSubmitting}
-        sx={{ mt: 3 }}
+    <Container
+      onClick={onClose}
+      maxWidth={false}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1300,
+      }}
+    >
+      <Paper
+        onClick={(e) => e.stopPropagation()}
+        elevation={3}
+        sx={{
+          backgroundColor: 'white',
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 24,
+          width: 600,
+          maxWidth: '90%',
+        }}
       >
-        {isSubmitting ? 'Сохранение...' : 'Сохранить изменения'}
-      </Button>
-    </Box>
+        <Typography variant="h4" gutterBottom>
+          Редактировать водителя
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <DriverField
+            label="Имя"
+            value={formData.name}
+            onChange={handleNameChange}
+            required
+            error={nameError}
+            minLength={3}
+            maxLength={20}
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Телефон"
+            value={formData.phone}
+            onChange={(e) => onFieldChange('phone', e.target.value)}
+            InputProps={{
+              inputComponent: MaskedInput as any,
+            }}
+            required
+          />
+
+          <DriverSelect
+            label="График"
+            value={formData.schedule}
+            onChange={(e) => onFieldChange('schedule', e.target.value)}
+            options={scheduleOptions}
+          />
+
+          <DriverSelect
+            label="Смена"
+            value={formData.shift}
+            onChange={(e) => onFieldChange('shift', e.target.value)}
+            options={shiftOptions}
+          />
+
+          <DriverField
+            label="Перерывы"
+            value={formData.breaks}
+            onChange={(e) => onFieldChange('breaks', e.target.value)}
+            maxLength={24}
+            minLength={5}
+            helperText="Введите перерывы через запятую, например: 12:00-12:30, 14:00-14:30"
+          />
+
+          <DriverSelect
+            label="ТС"
+            value={formData.vehicleName}
+            onChange={(e) => onFieldChange('vehicleName', e.target.value)}
+            options={cars}
+            helperText={
+              formData.vehicleName === ''
+                ? 'Для нового водителя требуется дополнительное согласование'
+                : undefined
+            }
+          />
+
+          {['', 'multi', 'temporarily_unassigned'].includes(
+            formData.vehicleName,
+          ) && (
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ mt: -1, display: 'block', color: 'orange' }}
+            >
+              {formData.vehicleName === 'multi'
+                ? 'Этот водитель будет работать с разными автомобилями'
+                : formData.vehicleName === 'temporarily_unassigned'
+                  ? 'Автомобиль будет назначен позже'
+                  : ''}
+            </Typography>
+          )}
+
+          <DriverField
+            label="Госномер"
+            value={formData.vehicleLicensePlate}
+            onChange={(e) =>
+              onFieldChange('vehicleLicensePlate', e.target.value)
+            }
+            required={
+              !['multi', 'temporarily_unassigned', ''].includes(
+                formData.vehicleName,
+              )
+            }
+            disabled={['multi', 'temporarily_unassigned', ''].includes(
+              formData.vehicleName,
+            )}
+            helperText={
+              ['multi', 'temporarily_unassigned', ''].includes(
+                formData.vehicleName,
+              )
+                ? 'Не требуется для временно непривязанных водителей'
+                : ' '
+            }
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting || !!nameError}
+            sx={{ mt: 2, width: '100%' }}
+          >
+            {isSubmitting ? 'Сохранение...' : 'Сохранить изменения'}
+          </Button>
+
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
+        </form>
+      </Paper>
+
+      <Snackbar
+        open={successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSuccessMessage(false)} severity="success">
+          Данные водителя успешно обновлены!
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 };

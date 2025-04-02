@@ -43,12 +43,12 @@ export const EditDriver: React.FC<EditDriverProps> = ({
           schedule: formData.schedule,
           shift: formData.shift,
           vehicle: {
-            name: ['', 'multi', 'temporarily_unassigned'].includes(
+            name: ['multi', 'temporarily_unassigned'].includes(
               formData.vehicleName,
             )
               ? ''
               : formData.vehicleName,
-            licensePlate: ['', 'multi', 'temporarily_unassigned'].includes(
+            licensePlate: ['multi', 'temporarily_unassigned'].includes(
               formData.vehicleName,
             )
               ? ''
@@ -58,8 +58,10 @@ export const EditDriver: React.FC<EditDriverProps> = ({
         }),
       ).unwrap();
 
-      onSuccess();
-      onClose();
+      setTimeout(() => {
+        onSuccess();
+        onClose();
+      }, 1500);
     } catch (err) {
       setError('Ошибка при обновлении водителя');
     } finally {

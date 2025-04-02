@@ -132,8 +132,10 @@ const DriverTable: React.FC<DriverTableProps> = ({
                   <TableCell>{driver.phone}</TableCell>
                   <TableCell>{driver.schedule}</TableCell>
                   <TableCell>{driver.shift}</TableCell>
-                  <TableCell>{driver.vehicle.name}</TableCell>
-                  <TableCell>{driver.vehicle.licensePlate}</TableCell>
+                  <TableCell>{driver.vehicle.name || 'Не назначено'}</TableCell>
+                  <TableCell>
+                    {driver.vehicle.licensePlate || 'Не назначено'}
+                  </TableCell>
                   <TableCell>{driver.breaks.join(', ')}</TableCell>
                   <TableCell
                     sx={{
