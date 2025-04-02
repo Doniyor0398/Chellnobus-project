@@ -13,7 +13,6 @@ import DriverSelect from './DriverSelect';
 import {
   scheduleOptions,
   shiftOptions,
-  breakOptions,
   cars,
 } from '../../constants/driverOptions';
 
@@ -87,6 +86,8 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
             onChange={handleNameChange}
             required
             error={nameError}
+            minLength={3}
+            maxLength={20}
           />
 
           <TextField
@@ -112,23 +113,54 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
             onChange={(e) => setShift(e.target.value)}
             options={shiftOptions}
           />
-          <DriverSelect
-            label="Перерыв"
+          <DriverField
+            label="Перерывы"
             value={breakTime}
             onChange={(e) => setBreakTime(e.target.value)}
-            options={breakOptions}
+            maxLength={24}
+            minLength={5}
+            helperText="Введите перерывы через запятую, например: 12:00-12:30, 14:00-14:30"
           />
+
           <DriverSelect
             label="ТС"
             value={vehicleName}
             onChange={(e) => setVehicleName(e.target.value)}
             options={cars}
+            helperText={
+              vehicleName === ''
+                ? 'Для нового водителя требуется дополнительное согласование'
+                : undefined
+            }
           />
+          {['', 'multi', 'temporarily_unassigned'].includes(vehicleName) && (
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ mt: -1, display: 'block', color: 'orange' }}
+            >
+              {vehicleName === 'multi'
+                ? 'Этот водитель будет работать с разными автомобилями'
+                : vehicleName === 'temporarily_unassigned'
+                  ? 'Автомобиль будет назначен позже'
+                  : ''}
+            </Typography>
+          )}
           <DriverField
             label="Госномер"
             value={vehicleLicensePlate}
             onChange={(e) => setVehicleLicensePlate(e.target.value)}
-            required
+            required={
+              !['multi', 'temporarily_unassigned', ''].includes(vehicleName)
+            }
+            disabled={['multi', 'temporarily_unassigned', ''].includes(
+              vehicleName,
+            )}
+            helperText={
+              ['multi', 'temporarily_unassigned', ''].includes(vehicleName)
+                ? 'Не требуется для временно непривязанных водителей'
+                : ' '
+            }
           />
           <Button
             type="submit"

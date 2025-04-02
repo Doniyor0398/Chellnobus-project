@@ -1,6 +1,7 @@
 export interface Vehicle {
   name: string;
   licensePlate: string;
+  specialStatus?: string;
 }
 
 export interface Driver {

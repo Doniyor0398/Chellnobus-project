@@ -39,12 +39,20 @@ export const EditDriver: React.FC<EditDriverProps> = ({
         editDriverThunk({
           ...driver,
           name: formData.name,
-          phone: formData.phone,
+          phone: formData.phone.replace(/\D/g, ''),
           schedule: formData.schedule,
           shift: formData.shift,
           vehicle: {
-            name: formData.vehicleName,
-            licensePlate: formData.vehicleLicensePlate,
+            name: ['', 'multi', 'temporarily_unassigned'].includes(
+              formData.vehicleName,
+            )
+              ? ''
+              : formData.vehicleName,
+            licensePlate: ['', 'multi', 'temporarily_unassigned'].includes(
+              formData.vehicleName,
+            )
+              ? ''
+              : formData.vehicleLicensePlate,
           },
           breaks: formData.breaks.split(',').map((s) => s.trim()),
         }),
@@ -68,6 +76,7 @@ export const EditDriver: React.FC<EditDriverProps> = ({
       isChanged={isChanged}
       onFieldChange={handleFieldChange}
       onSubmit={handleSubmit}
+      onClose={onClose}
     />
   );
 };

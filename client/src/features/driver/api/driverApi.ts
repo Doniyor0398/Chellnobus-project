@@ -7,7 +7,6 @@ const API_URL =
 export const getDrivers = async (): Promise<Driver[]> => {
   try {
     const response = await axios.get(`${API_URL}/drivers.json`);
-    console.log('Firebase данные:', response.data);
 
     if (!response.data) {
       console.warn('Данные в Firebase в /chelnobus/v1/drivers не найдены');
@@ -33,3 +32,5 @@ export const addDriver = async (
   const response = await axios.post(`${API_URL}/drivers.json`, driver);
   return { id: response.data.name, ...driver };
 };
+
+

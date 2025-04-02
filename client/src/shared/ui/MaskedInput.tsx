@@ -2,12 +2,13 @@ import React from 'react';
 import { IMaskInput } from 'react-imask';
 
 interface MaskedInputProps {
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
+  value: string;
 }
 
 const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
-  function MaskedInput(props, ref) {
+  (props, ref) => {
     const { onChange, ...other } = props;
 
     return (
@@ -17,11 +18,14 @@ const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
         definitions={{ '0': /[0-9]/ }}
         inputRef={ref}
         overwrite
-        onAccept={(value) =>
+        onAccept={(value) => {
           onChange({
-            target: { name: props.name, value },
-          } as React.ChangeEvent<HTMLInputElement>)
-        }
+            target: {
+              name: props.name,
+              value: value.replace(/\D/g, ''),
+            },
+          });
+        }}
       />
     );
   },

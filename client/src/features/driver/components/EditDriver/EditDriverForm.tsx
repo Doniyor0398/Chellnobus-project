@@ -11,6 +11,7 @@ interface EditDriverFormProps {
   isChanged: boolean;
   onFieldChange: (field: keyof DriverFormData, value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
+  onClose: () => void;
 }
 
 export const EditDriverForm: React.FC<EditDriverFormProps> = ({

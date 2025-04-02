@@ -33,15 +33,30 @@ export const useAddDriver = (onClose: () => void) => {
     e.preventDefault();
     setLoading(true);
 
+    let vehicleNameToSave = '';
+
+    if (
+      vehicleName &&
+      !['', 'multi', 'temporarily_unassigned'].includes(vehicleName)
+    ) {
+      vehicleNameToSave = vehicleName;
+    }
+
+    const rawPhone = phone.replace(/\D/g, '');
+
     const newDriver: Omit<Driver, 'id'> = {
       name,
-      phone: phone.replace(/\D/g, ''),
+      phone: rawPhone,
       schedule,
       shift,
-      breaks: [breakTime],
+      breaks: breakTime.split(',').map((b) => b.trim()),
       vehicle: {
-        name: vehicleName,
-        licensePlate: vehicleLicensePlate,
+        name: ['multi', 'temporarily_unassigned'].includes(vehicleName)
+          ? ''
+          : vehicleName,
+        licensePlate: ['multi', 'temporarily_unassigned'].includes(vehicleName)
+          ? ''
+          : vehicleLicensePlate,
       },
     };
 

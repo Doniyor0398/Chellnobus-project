@@ -69,7 +69,7 @@ export const Drivers = () => {
             sx={{
               border: '1px solid green',
               borderRadius: '10px',
-              width: '70px',
+              width: '80px',
               background: '#1976d2',
               color: 'white',
               ml: 1,

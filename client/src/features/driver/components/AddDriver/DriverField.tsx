@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, InputProps } from '@mui/material';
 
 interface DriverFieldProps {
   label: string;
@@ -7,6 +7,11 @@ interface DriverFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   error?: string | null;
+  minLength?: number;
+  maxLength?: number;
+  helperText?: string;
+  disabled?: boolean;
+  InputProps?: Partial<InputProps>;
 }
 
 const DriverField: React.FC<DriverFieldProps> = ({
@@ -15,7 +20,14 @@ const DriverField: React.FC<DriverFieldProps> = ({
   onChange,
   required,
   error,
+  minLength,
+  maxLength,
+  helperText,
+  disabled,
+  InputProps,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <TextField
       fullWidth
@@ -24,13 +36,24 @@ const DriverField: React.FC<DriverFieldProps> = ({
       value={value}
       onChange={onChange}
       required={required}
-      helperText={error || ' '}
+      helperText={error || (isFocused && helperText) || ' '}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      disabled={disabled}
+      InputProps={InputProps}
+      inputProps={{
+        minLength,
+        maxLength,
+      }}
       sx={{
         '& .MuiFormHelperText-root': {
-          visibility: error ? 'visible' : 'hidden',
-          height: error ? 'auto' : 0,
+          display: 'block',
           ml: 0,
-          color: 'red',
+          color: 'orange',
+          opacity: error || isFocused ? 1 : 0,
+          transition: 'opacity 0.2s ease',
+          visibility: error || isFocused ? 'visible' : 'hidden',
+          height: '5px',
         },
       }}
     />

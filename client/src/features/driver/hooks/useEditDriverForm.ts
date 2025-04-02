@@ -28,7 +28,18 @@ export const useEditDriverForm = (initialDriver: Driver) => {
   }, [formData, initialDriver]);
 
   const handleFieldChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const newData = { ...prev, [field]: value };
+
+      if (
+        field === 'vehicleName' &&
+        ['', 'multi', 'temporarily_unassigned'].includes(value)
+      ) {
+        newData.vehicleLicensePlate = '';
+      }
+
+      return newData;
+    });
   };
 
   return {
