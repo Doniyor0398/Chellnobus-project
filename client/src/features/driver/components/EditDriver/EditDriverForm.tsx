@@ -40,6 +40,7 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
 }) => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s/g, '');
@@ -100,10 +101,17 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
             margin="normal"
             label="Телефон"
             value={formData.phone}
-            onChange={(e) => onFieldChange('phone', e.target.value)}
             InputProps={{
               inputComponent: MaskedInput as any,
+              inputProps: {
+                name: 'phone',
+                mask: '+7 (000) 000-00-00',
+                definitions: { '0': /[0-9]/ },
+              },
             }}
+            onChange={(e) =>
+              onFieldChange('phone', e.target.value.replace(/\D/g, ''))
+            }
             required
           />
 
@@ -158,12 +166,28 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
             </Typography>
           )}
 
-          <DriverField
+          <TextField
+            fullWidth
+            margin="normal"
             label="Госномер"
             value={formData.vehicleLicensePlate}
-            onChange={(e) =>
-              onFieldChange('vehicleLicensePlate', e.target.value)
-            }
+            InputProps={{
+              inputComponent: MaskedInput as any,
+              inputProps: {
+                name: 'licensePlate',
+                mask: 'A 999 AA 999',
+                definitions: {
+                  A: /[АВЕКМНОРСТУХавекмнорстух]/,
+                  '9': /[0-9]/,
+                },
+                onFocus: () => setIsFocused(true),
+                onBlur: () => setIsFocused(false),
+              },
+            }}
+            onChange={(e) => {
+              const value = e.target.value.toUpperCase().replace(/\s/g, '');
+              onFieldChange('vehicleLicensePlate', value);
+            }}
             required={
               !['multi', 'temporarily_unassigned', ''].includes(
                 formData.vehicleName,
@@ -173,12 +197,20 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
               formData.vehicleName,
             )}
             helperText={
-              ['multi', 'temporarily_unassigned', ''].includes(
-                formData.vehicleName,
-              )
-                ? 'Не требуется для временно непривязанных водителей'
+              isFocused
+                ? 'Формат: А123БВ777 (русские буквы: А, В, Е, К, М, Н, О, Р, С, Т, У, Х)'
                 : ' '
             }
+            FormHelperTextProps={{
+              sx: {
+                color: 'orange',
+                ml: 0,
+                height: isFocused ? 'auto' : 0,
+                opacity: isFocused ? 1 : 0,
+                transition: 'all 0.3s ease',
+                overflow: 'hidden',
+              },
+            }}
           />
 
           <Button

@@ -92,6 +92,15 @@ const DriverTable: React.FC<DriverTableProps> = ({
     '& svg': { fontSize: '20px' },
   };
 
+  const formatPhoneNumber = (phone: string) => {
+    if (!phone) return '';
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length === 11 && /^[78]/.test(cleaned)) {
+      return `+7 (${cleaned.substring(1, 4)}) ${cleaned.substring(4, 7)}-${cleaned.substring(7, 9)}-${cleaned.substring(9)}`;
+    }
+    return phone;
+  };
+
   return (
     <Box
       sx={{
@@ -129,10 +138,16 @@ const DriverTable: React.FC<DriverTableProps> = ({
               currentData.map((driver) => (
                 <TableRow key={driver.id}>
                   <TableCell>{driver.name}</TableCell>
-                  <TableCell>{driver.phone}</TableCell>
+                  <TableCell>{formatPhoneNumber(driver.phone)}</TableCell>
                   <TableCell>{driver.schedule}</TableCell>
                   <TableCell>{driver.shift}</TableCell>
-                  <TableCell>{driver.vehicle.name || 'Не назначено'}</TableCell>
+                  <TableCell>
+                    {driver.vehicle.name === 'multi'
+                      ? 'Работает с разными ТС'
+                      : driver.vehicle.name === 'temporarily_unassigned'
+                        ? 'Временно без ТС'
+                        : driver.vehicle.name || 'Не назначено'}
+                  </TableCell>
                   <TableCell>
                     {driver.vehicle.licensePlate || 'Не назначено'}
                   </TableCell>

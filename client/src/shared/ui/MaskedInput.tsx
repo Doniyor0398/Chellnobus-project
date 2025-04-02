@@ -5,6 +5,8 @@ interface MaskedInputProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
   value: string;
+  mask: string;
+  definitions?: Record<string, RegExp>;
 }
 
 const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
@@ -14,15 +16,13 @@ const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
     return (
       <IMaskInput
         {...other}
-        mask="+7 (000) 000-00-00"
-        definitions={{ '0': /[0-9]/ }}
         inputRef={ref}
         overwrite
-        onAccept={(value) => {
+        onAccept={(value: string) => {
           onChange({
             target: {
               name: props.name,
-              value: value.replace(/\D/g, ''),
+              value: value,
             },
           });
         }}

@@ -95,9 +95,16 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
             margin="normal"
             label="Телефон"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
             InputProps={{
               inputComponent: MaskedInput as any,
+              inputProps: {
+                name: 'phone',
+                mask: '+7 (000) 000-00-00',
+                definitions: {
+                  '0': /[0-9]/,
+                },
+              },
             }}
             required
           />
@@ -136,7 +143,6 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
           {['', 'multi', 'temporarily_unassigned'].includes(vehicleName) && (
             <Typography
               variant="caption"
-              color="textSecondary"
               sx={{ mt: -1, display: 'block', color: 'orange' }}
             >
               {vehicleName === 'multi'
@@ -146,10 +152,25 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
                   : ''}
             </Typography>
           )}
-          <DriverField
+          <TextField
+            fullWidth
+            margin="normal"
             label="Госномер"
             value={vehicleLicensePlate}
-            onChange={(e) => setVehicleLicensePlate(e.target.value)}
+            onChange={(e) =>
+              setVehicleLicensePlate(e.target.value.toUpperCase())
+            }
+            InputProps={{
+              inputComponent: MaskedInput as any,
+              inputProps: {
+                name: 'licensePlate',
+                mask: 'A 999 AA 999',
+                definitions: {
+                  A: /[АВЕКМНОРСТУХавекмнорстух]/,
+                  '9': /[0-9]/,
+                },
+              },
+            }}
             required={
               !['multi', 'temporarily_unassigned', ''].includes(vehicleName)
             }
@@ -159,8 +180,9 @@ const AddDriverForm: React.FC<AddDriverProps> = ({ onClose }) => {
             helperText={
               ['multi', 'temporarily_unassigned', ''].includes(vehicleName)
                 ? 'Не требуется для временно непривязанных водителей'
-                : ' '
+                : 'Формат: А123БВ777 (русские буквы: А, В, Е, К, М, Н, О, Р, С, Т, У, Х)'
             }
+            FormHelperTextProps={{ sx: { color: 'orange !important', ml: 0 } }}
           />
           <Button
             type="submit"
