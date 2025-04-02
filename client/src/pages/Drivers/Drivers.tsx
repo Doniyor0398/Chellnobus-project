@@ -6,7 +6,7 @@ import {
 } from '../../shared/hooks/useAppDispatch';
 import { fetchDriversThunk } from '../../entities/driver/thunks/fetchDrivers';
 
-import DriverTable from '../../features/driver/components/DriverTable';
+import DriverTable from '../../features/driver/components/DriverTable/DriverTable';
 import {
   Button,
   Modal,

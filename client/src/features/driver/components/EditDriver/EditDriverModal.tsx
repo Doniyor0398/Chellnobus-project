@@ -11,7 +11,7 @@ interface EditDriverProps {
   onSuccess: () => void;
 }
 
-export const EditDriver: React.FC<EditDriverProps> = ({
+export const EditDriverModal: React.FC<EditDriverProps> = ({
   driver,
   onClose,
   onSuccess,
@@ -82,5 +82,3 @@ export const EditDriver: React.FC<EditDriverProps> = ({
     />
   );
 };
-
-export default EditDriver;

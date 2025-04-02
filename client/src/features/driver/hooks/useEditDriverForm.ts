@@ -1,7 +1,27 @@
 import { useState, useMemo } from 'react';
 import { Driver } from '../../../entities/driver/types/driverTypes';
 
-export const useEditDriverForm = (initialDriver: Driver) => {
+export const useEditDriverForm = (initialDriver?: Driver | null) => {
+  if (!initialDriver) {
+    return {
+      formData: {
+        name: '',
+        phone: '',
+        schedule: '',
+        shift: '',
+        vehicleName: '',
+        vehicleLicensePlate: '',
+        breaks: '',
+      },
+      error: null,
+      isSubmitting: false,
+      isChanged: false,
+      setError: () => {},
+      setIsSubmitting: () => {},
+      handleFieldChange: () => {},
+    };
+  }
+
   const [formData, setFormData] = useState({
     name: initialDriver.name,
     phone: initialDriver.phone,
