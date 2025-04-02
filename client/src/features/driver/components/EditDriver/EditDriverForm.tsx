@@ -34,6 +34,7 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
   formData,
   error,
   isSubmitting,
+  isChanged,
   onFieldChange,
   onSubmit,
   onClose,
@@ -217,7 +218,7 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isSubmitting || !!nameError}
+            disabled={isSubmitting || !!nameError || !isChanged}
             sx={{ mt: 2, width: '100%' }}
           >
             {isSubmitting ? 'Сохранение...' : 'Сохранить изменения'}
