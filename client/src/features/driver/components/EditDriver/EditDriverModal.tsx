@@ -25,6 +25,7 @@ export const EditDriverModal: React.FC<EditDriverProps> = ({
     setError,
     setIsSubmitting,
     handleFieldChange,
+    validateBreakTime,
   } = useEditDriverForm(driver);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +34,24 @@ export const EditDriverModal: React.FC<EditDriverProps> = ({
 
     setIsSubmitting(true);
     setError(null);
+
+    if (!validateBreakTime(formData.breaks)) {
+      setError(
+        'Некорректный формат перерывов. Используйте 12:00-12:30 или 12:00-12:30, 13:00-13:30',
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (
+      formData.vehicleName &&
+      !['', 'multi', 'temporarily_unassigned'].includes(formData.vehicleName) &&
+      !formData.vehicleLicensePlate
+    ) {
+      setError('Для выбранного ТС требуется указать госномер');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       await dispatch(
@@ -54,7 +73,11 @@ export const EditDriverModal: React.FC<EditDriverProps> = ({
               ? ''
               : formData.vehicleLicensePlate,
           },
-          breaks: formData.breaks.split(',').map((s) => s.trim()),
+          breaks: formData.breaks
+            .replace(/\s/g, '')
+            .split(',')
+            .filter(Boolean)
+            .map((b) => b.trim()),
         }),
       ).unwrap();
 

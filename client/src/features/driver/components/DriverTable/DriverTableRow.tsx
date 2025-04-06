@@ -8,14 +8,10 @@ import { editButtonStyles } from './driverTableStyles';
 interface Props {
   driver: Driver;
   onEdit: (driver: Driver) => void;
-  onDeleteSuccess: () => void;
+  onDelete: (driverId: string) => void;
 }
 
-const DriverTableRow: React.FC<Props> = ({
-  driver,
-  onEdit,
-  onDeleteSuccess,
-}) => {
+const DriverTableRow: React.FC<Props> = ({ driver, onEdit, onDelete }) => {
   return (
     <TableRow>
       <TableCell>{driver.name}</TableCell>
@@ -30,7 +26,7 @@ const DriverTableRow: React.FC<Props> = ({
           <EditOutlinedIcon />
         </Button>
         <Button
-          onClick={onDeleteSuccess}
+          onClick={() => onDelete(driver.id)}
           sx={{ ...editButtonStyles, color: 'red' }}
         >
           <DeleteForeverOutlinedIcon />

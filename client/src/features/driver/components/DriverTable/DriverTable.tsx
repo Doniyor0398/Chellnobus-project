@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAppDispatch } from '../../../../shared/hooks/useAppDispatch';
+import { deleteDriverThunk } from '../../../../entities/driver/thunks/deleteDriverThunk';
 
 import {
   Table,
@@ -27,6 +29,8 @@ const DriverTable: React.FC<Props> = ({
   onDeleteSuccess,
   onEditSuccess,
 }) => {
+  const dispatch = useAppDispatch();
+
   const [page, setPage] = useState(1);
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null);
   const itemsPerPage = 10;
@@ -35,6 +39,15 @@ const DriverTable: React.FC<Props> = ({
     (page - 1) * itemsPerPage,
     page * itemsPerPage,
   );
+
+  const handleDeleteDriver = async (driverId: string) => {
+    try {
+      await dispatch(deleteDriverThunk(driverId)).unwrap();
+      onDeleteSuccess();
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -51,7 +64,7 @@ const DriverTable: React.FC<Props> = ({
                   key={driver.id}
                   driver={driver}
                   onEdit={setEditingDriver}
-                  onDeleteSuccess={onDeleteSuccess}
+                  onDelete={handleDeleteDriver}
                 />
               ))
             ) : (

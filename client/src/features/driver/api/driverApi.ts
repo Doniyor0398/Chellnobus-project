@@ -6,31 +6,45 @@ const API_URL =
 
 export const getDrivers = async (): Promise<Driver[]> => {
   try {
-    const response = await axios.get(`${API_URL}/drivers.json`);
+    const response = await axios.get<Record<string, Omit<Driver, 'id'>>>(
+      `${API_URL}/drivers.json`,
+    );
 
     if (!response.data) {
-      console.warn('Данные в Firebase в /chelnobus/v1/drivers не найдены');
+      console.warn('Данные в Firebase не найдены');
       return [];
     }
 
-    const driversData = response.data;
-    const driversArray: Driver[] = Object.keys(driversData).map((key) => ({
-      id: key,
-      ...driversData[key],
-    }));
+    return Object.entries(response.data).map(([id, driverData]) => {
+      if (!driverData) {
+        return {
+          id,
+          name: '',
+          phone: '',
+          schedule: '',
+          shift: '',
+          vehicle: { name: '', licensePlate: '' },
+          breaks: [],
+        };
+      }
 
-    return driversArray;
+      return {
+        id,
+        name: driverData.name || '',
+        phone: driverData.phone || '',
+        schedule: driverData.schedule || '',
+        shift: driverData.shift || '',
+        vehicle: driverData.vehicle
+          ? {
+              name: driverData.vehicle.name || '',
+              licensePlate: driverData.vehicle.licensePlate || '',
+            }
+          : { name: '', licensePlate: '' },
+        breaks: driverData.breaks || [],
+      };
+    });
   } catch (error) {
     console.error('Error fetching drivers:', error);
     throw error;
   }
 };
-
-export const addDriver = async (
-  driver: Omit<Driver, 'id'>,
-): Promise<Driver> => {
-  const response = await axios.post(`${API_URL}/drivers.json`, driver);
-  return { id: response.data.name, ...driver };
-};
-
-

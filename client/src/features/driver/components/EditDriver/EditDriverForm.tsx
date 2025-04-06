@@ -130,13 +130,42 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
             options={shiftOptions}
           />
 
-          <DriverField
+          <TextField
+            fullWidth
+            margin="normal"
             label="Перерывы"
             value={formData.breaks}
             onChange={(e) => onFieldChange('breaks', e.target.value)}
-            maxLength={24}
-            minLength={5}
-            helperText="Введите перерывы через запятую, например: 12:00-12:30, 14:00-14:30"
+            InputProps={{
+              inputComponent: MaskedInput as any,
+              inputProps: {
+                name: 'breaks',
+                mask: [
+                  {
+                    mask: '00:00-00:00',
+                    lazy: false,
+                  },
+                  {
+                    mask: '00:00-00:00, 00:00-00:00',
+                    lazy: false,
+                  },
+                ],
+                definitions: {
+                  '0': /[0-9]/,
+                },
+              },
+            }}
+            helperText="Формат: 12:00-12:30 или 12:00-12:30, 13:00-13:30"
+            error={!!error && error.includes('перерывов')}
+            FormHelperTextProps={{
+              sx: {
+                color:
+                  error && error.includes('перерывов')
+                    ? 'error.main'
+                    : 'orange',
+                ml: 0,
+              },
+            }}
           />
 
           <DriverSelect

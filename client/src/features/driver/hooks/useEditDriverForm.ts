@@ -19,6 +19,7 @@ export const useEditDriverForm = (initialDriver?: Driver | null) => {
       setError: () => {},
       setIsSubmitting: () => {},
       handleFieldChange: () => {},
+      validateBreakTime: () => true,
     };
   }
 
@@ -35,6 +36,23 @@ export const useEditDriverForm = (initialDriver?: Driver | null) => {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const validateBreakTime = (time: string): boolean => {
+    if (!time.trim()) return true;
+    const breaks = time
+      .split(',')
+      .map((b) => b.trim())
+      .filter(Boolean);
+    return breaks.every((breakItem) => {
+      const [start, end] = breakItem.split('-').map((t) => t.trim());
+      return (
+        start &&
+        end &&
+        /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(start) &&
+        /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(end)
+      );
+    });
+  };
+
   const isChanged = useMemo(() => {
     return (
       formData.name !== initialDriver.name ||
@@ -43,17 +61,26 @@ export const useEditDriverForm = (initialDriver?: Driver | null) => {
       formData.shift !== initialDriver.shift ||
       formData.vehicleName !== initialDriver.vehicle.name ||
       formData.vehicleLicensePlate !== initialDriver.vehicle.licensePlate ||
-      formData.breaks !== initialDriver.breaks.join(', ')
+      formData.breaks.replace(/\s/g, '') !== initialDriver.breaks.join(',')
     );
   }, [formData, initialDriver]);
 
   const handleFieldChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => {
-      const newData = { ...prev, [field]: value };
+      let newValue = value;
+      if (field === 'breaks') {
+        newValue = value
+          .replace(/(\d),(\d)/g, '$1,$2')
+          .replace(/,(\s*),/g, ',')
+          .replace(/\s+,/g, ',')
+          .replace(/,\s+/g, ', ');
+      }
+
+      const newData = { ...prev, [field]: newValue };
 
       if (
         field === 'vehicleName' &&
-        ['', 'multi', 'temporarily_unassigned'].includes(value)
+        ['', 'multi', 'temporarily_unassigned'].includes(newValue)
       ) {
         newData.vehicleLicensePlate = '';
       }
@@ -70,5 +97,6 @@ export const useEditDriverForm = (initialDriver?: Driver | null) => {
     setError,
     setIsSubmitting,
     handleFieldChange,
+    validateBreakTime,
   };
 };
