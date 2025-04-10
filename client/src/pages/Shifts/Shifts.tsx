@@ -1,8 +1,8 @@
-const Change: React.FC = () => {
+const Shifts: React.FC = () => {
   return (
     <div>
       <h1>Смены</h1>
     </div>
   );
 };
-export default Change;
+export default Shifts;

@@ -47,7 +47,7 @@ export const Dashboard: React.FC = () => {
     switch (location.pathname) {
       case '/':
         return 'Водители';
-      case '/change':
+      case '/shifts':
         return 'Смена';
       case '/orders':
         return 'Заказы';
@@ -118,7 +118,7 @@ export const Dashboard: React.FC = () => {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/change">
+              <ListItemButton component={Link} to="/shifts">
                 <Schedule sx={{ mr: 2 }} />
                 <ListItemText primary="Смена" />
               </ListItemButton>

@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import LoginPage from '../../pages/Login/LoginPage';
 import RegisterPage from '../../pages/Register/RegisterPage';
 import Dashboard from '../../widgets/Dashboard/Dashboard';
-import Change from '../../pages/Change/Change';
+import Shifts from '../../pages/Shifts/Shifts';
 import { Drivers } from '../../pages/Drivers/Drivers';
 import Orders from '../../pages/Orders/Orders';
 import Users from '../../pages/Users/Users';
@@ -14,7 +14,7 @@ const AppRouter: React.FC = () => {
       <Route path="/" element={<Dashboard />}>
         <Route index element={<Drivers />} />
         <Route path="/drivers" element={<Drivers />} />
-        <Route path="/change" element={<Change />} />
+        <Route path="/shifts" element={<Shifts />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/users" element={<Users />} />
       </Route>
