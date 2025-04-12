@@ -14,14 +14,20 @@ interface Props {
 const DriverTableRow: React.FC<Props> = ({ driver, onEdit, onDelete }) => {
   return (
     <TableRow>
-      <TableCell>{driver.name}</TableCell>
-      <TableCell>{formatPhoneNumber(driver.phone)}</TableCell>
-      <TableCell>{driver.schedule}</TableCell>
-      <TableCell>{driver.shift}</TableCell>
-      <TableCell>{driver.vehicle.name || 'Не назначено'}</TableCell>
-      <TableCell>{driver.vehicle.licensePlate || 'Не назначено'}</TableCell>
-      <TableCell>{driver.breaks.join(', ')}</TableCell>
-      <TableCell sx={{ display: 'flex' }}>
+      <TableCell sx={{ width: '200px' }}>{driver.name}</TableCell>
+      <TableCell sx={{ width: '150px' }}>
+        {formatPhoneNumber(driver.phone)}
+      </TableCell>
+      <TableCell sx={{ width: '120px' }}>{driver.schedule}</TableCell>
+      <TableCell sx={{ width: '100px' }}>{driver.shift}</TableCell>
+      <TableCell sx={{ width: '150px' }}>
+        {driver.vehicle.name || 'Не назначено'}
+      </TableCell>
+      <TableCell sx={{ width: '120px' }}>
+        {driver.vehicle.licensePlate || 'Не назначено'}
+      </TableCell>
+      <TableCell sx={{ width: '150px' }}>{driver.breaks.join(', ')}</TableCell>
+      <TableCell sx={{ width: '120px', display: 'flex' }}>
         <Button onClick={() => onEdit(driver)} sx={editButtonStyles}>
           <EditOutlinedIcon />
         </Button>
