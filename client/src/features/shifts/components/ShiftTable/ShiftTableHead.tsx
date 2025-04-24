@@ -1,5 +1,5 @@
 import { TableHead, TableRow, TableCell } from '@mui/material';
-import { themeForTableCell } from '../../driver/components/DriverTable/driverTableStyles';
+import { themeForTableCell } from '../../../driver/components/DriverTable/driverTableStyles';
 
 const ShiftTableHead = () => (
   <TableHead>

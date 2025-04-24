@@ -70,7 +70,7 @@ const DriverTable: React.FC<Props> = ({
             flex: '1 1 auto',
             overflow: 'auto',
             width: '100%',
-            maxHeight: 'calc(100vh - 200px)', // Установите нужную высоту
+            maxHeight: 'calc(100vh - 200px)',
           }}
         >
           <Table
