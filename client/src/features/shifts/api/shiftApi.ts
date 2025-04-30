@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { Shift, ShiftStatus, Driver } from '../types/ShiftTypes';
+import {
+  Shift,
+  ShiftStatus,
+  Driver,
+  ShiftFormValues,
+} from '../types/ShiftTypes';
 
 const API_BASE_URL =
   'https://auth-face-api-default-rtdb.asia-southeast1.firebasedatabase.app/chelnobus/v1';
@@ -41,6 +46,23 @@ class ShiftApiService {
     };
   }
 
+  public async updateShift(
+    shiftId: string,
+    shiftData: ShiftFormValues,
+  ): Promise<void> {
+    try {
+      const dataToSend = {
+        ...shiftData,
+        driver: this.normalizeDriver(shiftData.driver),
+        status: this.normalizeStatus(shiftData.status),
+      };
+      await axios.patch(`${API_BASE_URL}/shifts/${shiftId}.json`, dataToSend);
+    } catch (error) {
+      console.error('[ShiftApi] Failed to update shift:', error);
+      throw new Error('Не удалось обновить смену');
+    }
+  }
+
   private normalizeDriver(driver: unknown): Driver {
     if (typeof driver === 'string') {
       return {
@@ -73,6 +95,20 @@ class ShiftApiService {
       onBreak: statusObj?.onBreak || '',
       notActive: statusObj?.notActive || '',
     };
+  }
+
+  public async createShift(shiftData: ShiftFormValues): Promise<void> {
+    try {
+      const dataToSend = {
+        ...shiftData,
+        driver: this.normalizeDriver(shiftData.driver),
+        status: this.normalizeStatus(shiftData.status),
+      };
+      await axios.post(`${API_BASE_URL}/shifts.json`, dataToSend);
+    } catch (error) {
+      console.error('[ShiftApi] Failed to create shift:', error);
+      throw new Error('Не удалось создать смену');
+    }
   }
 
   public async fetchShifts(): Promise<NormalizedShift[]> {

@@ -1,7 +1,7 @@
 import { TableRow, TableCell, Button, Stack, Box } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
-import { Shift } from '../../types/ShiftTypes';
+import { Shift, ShiftStatus } from '../../types/ShiftTypes';
 
 const statusStyles = {
   display: 'inline-flex',
@@ -36,37 +36,36 @@ interface Props {
 }
 
 const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
-  const getCurrentStatus = () => {
-    if (typeof shift.status === 'object') {
-      if (shift.status.active === 'Активна') return 'active';
-      if (shift.status.onBreak === 'На перерыве') return 'onBreak';
+  const getCurrentStatus = (): 'active' | 'onBreak' | 'notActive' => {
+    if (typeof shift.status === 'string') {
+      const statusStr = (shift.status as string).toLowerCase();
+      if (statusStr.includes('актив')) return 'active';
+      if (statusStr.includes('перерыв')) return 'onBreak';
       return 'notActive';
     }
-    return shift.status.includes('Актив')
-      ? 'active'
-      : shift.status.includes('перерыв')
-        ? 'onBreak'
-        : 'notActive';
+
+    const statusObj = shift.status as ShiftStatus;
+
+    if (statusObj.active?.includes('Активна')) return 'active';
+    if (statusObj.onBreak?.includes('На перерыве')) return 'onBreak';
+    return 'notActive';
   };
 
   const currentStatus = getCurrentStatus();
   const isActive = currentStatus === 'active';
   const isOnBreak = currentStatus === 'onBreak';
 
-  // Форматирование имени водителя
   const driverName =
     typeof shift.driver === 'string'
       ? shift.driver
       : `${shift.driver?.firstName || ''} ${shift.driver?.lastName || ''}`.trim();
 
-  // Стиль для статуса
   const statusStyle = isActive
     ? activeStyle
     : isOnBreak
       ? onBreakStyle
       : notActiveStyle;
 
-  // Текст и иконка статуса
   const statusDisplay = isActive
     ? { text: 'Активна', icon: '🟢' }
     : isOnBreak

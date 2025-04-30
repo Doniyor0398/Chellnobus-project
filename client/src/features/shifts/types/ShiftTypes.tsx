@@ -10,7 +10,7 @@ export interface ShiftStatus {
   notActive: string;
 }
 
-export interface Shift {
+export interface Shifts {
   id: string;
   vehicle: string;
   licensePlate: string;
@@ -23,7 +23,30 @@ export interface Shift {
   zoneStart: string;
   breaks: string[];
   status: ShiftStatus | string;
-  actions: {
+  actions?: {
+    start: string;
+    stop: string;
+  };
+}
+
+export interface ShiftFormValues {
+  vehicle: string;
+  licensePlate: string;
+  carName: string;
+  driver: string;
+  startShift: string;
+  endShift: string;
+  startTerminal: string;
+  endTerminal: string;
+  zoneStart: string;
+  breaks: string[];
+  status: ShiftStatus;
+}
+
+export interface Shift extends Omit<ShiftFormValues, 'driver'> {
+  id: string;
+  driver: string | Driver;
+  actions?: {
     start: string;
     stop: string;
   };

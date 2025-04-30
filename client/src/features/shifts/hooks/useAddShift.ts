@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { shiftApi } from '../api/shiftApi';
-import { ShiftFormValues } from '../types/ShiftTypes';
+import { ShiftFormValues, ShiftStatus } from '../types/ShiftTypes';
 
 export const useAddShift = (onSuccess: () => void) => {
   const [formData, setFormData] = useState<ShiftFormValues>({
     vehicle: '',
     licensePlate: '',
     carName: '',
-    driver: '',
+    driver: '', 
     startShift: '',
     endShift: '',
     startTerminal: '',
@@ -20,8 +20,14 @@ export const useAddShift = (onSuccess: () => void) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (field: keyof ShiftFormValues, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleChange = (
+    field: keyof ShiftFormValues,
+    value: string | string[] | ShiftStatus,
+  ) => {
+    setFormData((prev: ShiftFormValues) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,7 +36,7 @@ export const useAddShift = (onSuccess: () => void) => {
     setError(null);
 
     try {
-      await shiftApi.addShift(formData);
+      await shiftApi.createShift(formData);
       onSuccess();
     } catch (err) {
       setError('Ошибка при добавлении смены');
