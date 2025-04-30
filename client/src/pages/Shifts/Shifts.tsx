@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import ShiftTable from '../../features/shifts/components/ShiftTable/ShiftTable';
 import { shiftApi } from '../../features/shifts/api/shiftApi';
 import { Shift } from '../../features/shifts/types/ShiftTypes';
-import { CircularProgress, Alert } from '@mui/material';
+import { CircularProgress, Alert, Button, Stack } from '@mui/material';
+import AddShiftModal from '../../features/shifts/components/AddShiftModal/AddShiftModal';
 
 const ShiftsPage: React.FC = () => {
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const loadShifts = async () => {
     try {
@@ -27,15 +29,18 @@ const ShiftsPage: React.FC = () => {
   }, []);
 
   const handleStartShift = async (shiftId: string) => {
-    // Здесь будет логика старта смены
     console.log('Начало смены:', shiftId);
-    await loadShifts(); // Перезагружаем данные
+    await loadShifts();
   };
 
   const handleStopShift = async (shiftId: string) => {
-    // Здесь будет логика остановки смены
     console.log('Окончание смены:', shiftId);
-    await loadShifts(); // Перезагружаем данные
+    await loadShifts();
+  };
+
+  const handleAddSuccess = () => {
+    setIsAddModalOpen(false);
+    loadShifts();
   };
 
   if (loading) return <CircularProgress />;
@@ -43,11 +48,32 @@ const ShiftsPage: React.FC = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Управление сменами</h1>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <h1>Управление сменами</h1>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setIsAddModalOpen(true)}
+        >
+          Добавить смену
+        </Button>
+      </Stack>
+
       <ShiftTable
         shifts={shifts}
         onStartShift={handleStartShift}
         onStopShift={handleStopShift}
+      />
+
+      <AddShiftModal
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={handleAddSuccess}
       />
     </div>
   );
