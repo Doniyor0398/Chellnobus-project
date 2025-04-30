@@ -1,64 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { CircularProgress, Alert, Button, Box } from '@mui/material';
-import ShiftTable from '../../features/shifts/components/ShiftTable/ShiftTable';
-import AddShiftModal from '../../features/shifts/components/AddShiftModal/AddShiftModal';
-import { shiftApi } from '../../features/shifts/api/shiftApi';
+import React, { useState } from 'react';
 import { Shift } from '../../features/shifts/types/ShiftTypes';
+import ShiftTable from '../../features/shifts/ShiftTable/ShiftTable';
 
-const ShiftsPage: React.FC = () => {
-  const [shifts, setShifts] = useState<Shift[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+const dummyData: Shift[] = [
+  {
+    id: '859',
+    vehicle: 'Автобус 859',
+    driver: 'Курбатский',
+    startShift: '29.08.23 08:00',
+    endShift: '29.08.23 21:30',
+    startTerminal: 'Сколково-старт',
+    endTerminal: 'Сколково-старт',
+    zoneStart: 'MSK1 (Прокшино)',
+    status: 'Активна',
+    breaks: ['00:45 начало 29.08 в 11:14', '02:00 начало 29.08 в 14:45'],
+  },
+];
 
-  const fetchShifts = async () => {
-    try {
-      setLoading(true);
-      const data = await shiftApi.fetchShifts();
-      setShifts(data);
-    } catch (err) {
-      setError('Ошибка загрузки смен');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+const Shifts: React.FC = () => {
+  const [shifts, setShifts] = useState<Shift[]>(dummyData);
+
+  const handleDeleteSuccess = () => {
+    //  обновление данных
   };
 
-  useEffect(() => {
-    fetchShifts();
-  }, []);
-
-  const handleStatusChange = async (
-    shiftId: string,
-    status: Partial<Shift['status']>,
-  ) => {
-    try {
-      await shiftApi.updateShiftStatus(shiftId, status);
-      fetchShifts(); // Обновляем список после изменения
-    } catch (err) {
-      setError('Ошибка обновления статуса');
-      console.error(err);
-    }
+  const handleEditSuccess = () => {
+    //  обновление данных
   };
-
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <h1>Управление сменами</h1>
-        <Button variant="contained" onClick={() => setIsAddModalOpen(true)}>
-          Добавить смену
-        </Button>
-      </Box>
-
-      <ShiftTable shifts={shifts} onStatusChange={handleStatusChange} />
-
-      <AddShiftModal
-        open={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onSuccess={fetchShifts}
+    <div style={{ padding: '20px' }}>
+      <h1>Смены</h1>
+      <ShiftTable
+        data={shifts}
+        onDeleteSuccess={handleDeleteSuccess}
+        onEditSuccess={handleEditSuccess}
       />
     </Box>
   );
