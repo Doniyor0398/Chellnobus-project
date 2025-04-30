@@ -1,19 +1,10 @@
 import React from 'react';
-import {
-  TextField,
-  Button,
-  Stack,
-  Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
-import { ShiftFormValues } from '../types/ShiftTypes';
+import { TextField, Button, Stack, Alert } from '@mui/material';
+import { Shift } from '../../types/ShiftTypes';
 
 interface ShiftFormProps {
-  formData: ShiftFormValues;
-  onChange: (field: keyof ShiftFormValues, value: any) => void;
+  formData: Shift;
+  onChange: (field: keyof Shift, value: any) => void;
   onSubmit: (e: React.FormEvent) => void;
   error: string | null;
   loading: boolean;

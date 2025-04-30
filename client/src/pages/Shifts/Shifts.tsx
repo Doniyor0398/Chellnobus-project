@@ -1,42 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ShiftTable from '../../features/shifts/components/ShiftTable/ShiftTable';
+import { shiftApi } from '../../features/shifts/api/shiftApi';
 import { Shift } from '../../features/shifts/types/ShiftTypes';
-import ShiftTable from '../../features/shifts/ShiftTable/ShiftTable';
+import { CircularProgress, Alert } from '@mui/material';
 
-const dummyData: Shift[] = [
-  {
-    id: '859',
-    vehicle: 'Автобус 859',
-    driver: 'Курбатский',
-    startShift: '29.08.23 08:00',
-    endShift: '29.08.23 21:30',
-    startTerminal: 'Сколково-старт',
-    endTerminal: 'Сколково-старт',
-    zoneStart: 'MSK1 (Прокшино)',
-    status: 'Активна',
-    breaks: ['00:45 начало 29.08 в 11:14', '02:00 начало 29.08 в 14:45'],
-  },
-];
+const ShiftsPage: React.FC = () => {
+  const [shifts, setShifts] = useState<Shift[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-const Shifts: React.FC = () => {
-  const [shifts, setShifts] = useState<Shift[]>(dummyData);
-
-  const handleDeleteSuccess = () => {
-    //  обновление данных
+  const loadShifts = async () => {
+    try {
+      setLoading(true);
+      const shifts = await shiftApi.fetchShifts();
+      setShifts(shifts);
+    } catch (err) {
+      setError('Не удалось загрузить данные смен');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditSuccess = () => {
-    //  обновление данных
+  useEffect(() => {
+    loadShifts();
+  }, []);
+
+  const handleStartShift = async (shiftId: string) => {
+    // Здесь будет логика старта смены
+    console.log('Начало смены:', shiftId);
+    await loadShifts(); // Перезагружаем данные
   };
+
+  const handleStopShift = async (shiftId: string) => {
+    // Здесь будет логика остановки смены
+    console.log('Окончание смены:', shiftId);
+    await loadShifts(); // Перезагружаем данные
+  };
+
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">{error}</Alert>;
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Смены</h1>
+      <h1>Управление сменами</h1>
       <ShiftTable
-        data={shifts}
-        onDeleteSuccess={handleDeleteSuccess}
-        onEditSuccess={handleEditSuccess}
+        shifts={shifts}
+        onStartShift={handleStartShift}
+        onStopShift={handleStopShift}
       />
-    </Box>
+    </div>
   );
 };
 

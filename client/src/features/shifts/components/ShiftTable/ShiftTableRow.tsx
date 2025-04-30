@@ -3,7 +3,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { Shift } from '../../types/ShiftTypes';
 
-// Стили для статусов
 const statusStyles = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -37,7 +36,6 @@ interface Props {
 }
 
 const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
-  // Определяем текущий статус
   const getCurrentStatus = () => {
     if (typeof shift.status === 'object') {
       if (shift.status.active === 'Активна') return 'active';

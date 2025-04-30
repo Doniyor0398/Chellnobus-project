@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Box, Typography } from '@mui/material';
 import { useEditShift } from '../../hooks/useEditShift';
-import { Shift } from '../types/shift';
+import { Shift } from '../../types/ShiftTypes';
 import ShiftForm from '../ShiftForm/ShiftForm';
 
 const style = {
