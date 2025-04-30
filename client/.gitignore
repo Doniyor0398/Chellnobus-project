@@ -62,3 +62,5 @@ node_modules/
 fack-db.json
 .env
 
+.DS_Store
+**/.DS_Store # Для вложенных папок
