@@ -14,12 +14,14 @@ interface ShiftTableProps {
   shifts: Shift[];
   onStartShift: (shiftId: string) => void;
   onStopShift: (shiftId: string) => void;
+  onEditSuccess: (updatedShift: Shift) => void;
 }
 
 const ShiftTable: React.FC<ShiftTableProps> = ({
   shifts,
   onStartShift,
   onStopShift,
+  onEditSuccess,
 }) => {
   return (
     <TableContainer component={Paper}>
@@ -33,6 +35,7 @@ const ShiftTable: React.FC<ShiftTableProps> = ({
                 shift={shift}
                 onStart={onStartShift}
                 onStop={onStopShift}
+                onEditSuccess={onEditSuccess}
               />
             ))
           ) : (

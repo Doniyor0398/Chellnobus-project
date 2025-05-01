@@ -49,18 +49,9 @@ class ShiftApiService {
   public async updateShift(
     shiftId: string,
     shiftData: ShiftFormValues,
-  ): Promise<void> {
-    try {
-      const dataToSend = {
-        ...shiftData,
-        driver: this.normalizeDriver(shiftData.driver),
-        status: this.normalizeStatus(shiftData.status),
-      };
-      await axios.patch(`${API_BASE_URL}/shifts/${shiftId}.json`, dataToSend);
-    } catch (error) {
-      console.error('[ShiftApi] Failed to update shift:', error);
-      throw new Error('Не удалось обновить смену');
-    }
+  ): Promise<Shift> {
+    await axios.patch(`${API_BASE_URL}/shifts/${shiftId}.json`, shiftData);
+    return { id: shiftId, ...shiftData }; // Возвращаем обновлённую смену
   }
 
   private normalizeDriver(driver: unknown): Driver {
@@ -97,18 +88,14 @@ class ShiftApiService {
     };
   }
 
-  public async createShift(shiftData: ShiftFormValues): Promise<void> {
-    try {
-      const dataToSend = {
-        ...shiftData,
-        driver: this.normalizeDriver(shiftData.driver),
-        status: this.normalizeStatus(shiftData.status),
-      };
-      await axios.post(`${API_BASE_URL}/shifts.json`, dataToSend);
-    } catch (error) {
-      console.error('[ShiftApi] Failed to create shift:', error);
-      throw new Error('Не удалось создать смену');
-    }
+  public async createShift(shiftData: ShiftFormValues): Promise<Shift> {
+    const response = await axios.post(`${API_BASE_URL}/shifts.json`, shiftData);
+    return {
+      id: response.data.name,
+      ...shiftData,
+      driver: this.normalizeDriver(shiftData.driver),
+      status: this.normalizeStatus(shiftData.status),
+    };
   }
 
   public async fetchShifts(): Promise<NormalizedShift[]> {

@@ -37,15 +37,22 @@ const notActiveStyle = {
   ...statusStyles,
   backgroundColor: 'rgba(244, 67, 54, 0.1)',
   color: '#F44336',
+  width: '118px',
 };
 
 interface Props {
   shift: Shift;
   onStart: (shiftId: string) => void;
   onStop: (shiftId: string) => void;
+  onEditSuccess: (updatedShift: Shift) => void;
 }
 
-const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
+const ShiftTableRow: React.FC<Props> = ({
+  shift,
+  onStart,
+  onStop,
+  onEditSuccess,
+}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const getCurrentStatus = (): 'active' | 'onBreak' | 'notActive' => {
@@ -81,7 +88,7 @@ const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
   const statusDisplay = isActive
     ? { text: 'Активна', icon: '🟢' }
     : isOnBreak
-      ? { text: 'На перерыве', icon: '🔵' }
+      ? { text: 'На перерыве', icon: '☕️' }
       : { text: 'Не активна', icon: '🔴' };
 
   return (
@@ -108,7 +115,10 @@ const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
             {!isActive && (
               <Button
                 size="small"
-                onClick={() => onStart(shift.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onStart(shift.id);
+                }}
                 variant="contained"
                 color="success"
                 startIcon={<PlayArrowIcon />}
@@ -120,7 +130,10 @@ const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
             {isActive && (
               <Button
                 size="small"
-                onClick={() => onStop(shift.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onStop(shift.id);
+                }}
                 variant="contained"
                 color="error"
                 startIcon={<StopIcon />}
@@ -144,6 +157,7 @@ const ShiftTableRow: React.FC<Props> = ({ shift, onStart, onStop }) => {
         shift={shift}
         open={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        onSuccess={onEditSuccess}
       />
     </>
   );

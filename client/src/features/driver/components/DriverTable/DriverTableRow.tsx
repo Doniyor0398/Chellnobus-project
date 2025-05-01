@@ -13,7 +13,7 @@ interface Props {
 
 const DriverTableRow: React.FC<Props> = ({ driver, onEdit, onDelete }) => {
   return (
-    <TableRow>
+    <TableRow hover>
       <TableCell sx={{ width: '200px' }}>{driver.name}</TableCell>
       <TableCell sx={{ width: '150px' }}>
         {formatPhoneNumber(driver.phone)}

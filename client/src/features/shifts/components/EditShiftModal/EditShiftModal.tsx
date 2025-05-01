@@ -20,6 +20,7 @@ interface Props {
   shift: Shift;
   open: boolean;
   onClose: () => void;
+  onSuccess: (updatedShift: Shift) => void;
 }
 
 const EditShiftModal: React.FC<Props> = ({ shift, open, onClose }) => {

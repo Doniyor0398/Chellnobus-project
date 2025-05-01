@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Box, Typography } from '@mui/material';
 import ShiftForm from '../ShiftForm/ShiftForm';
 import { useAddShift } from '../../hooks/useAddShift';
+import { Shift } from '../../types/ShiftTypes';
 
 const modalStyle = {
   position: 'absolute',
@@ -18,7 +19,7 @@ const modalStyle = {
 interface AddShiftModalProps {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (newShift: Shift) => void;
 }
 
 const AddShiftModal: React.FC<AddShiftModalProps> = ({

@@ -3,7 +3,6 @@ import { shiftApi } from '../api/shiftApi';
 import { Shift, ShiftFormValues } from '../types/ShiftTypes';
 
 export const useEditShift = (shift: Shift, onSuccess: () => void) => {
-  // Преобразуем Shift в ShiftFormValues
   const [formData, setFormData] = useState<ShiftFormValues>({
     ...shift,
     driver:

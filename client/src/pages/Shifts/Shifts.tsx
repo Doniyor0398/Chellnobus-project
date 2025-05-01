@@ -29,18 +29,62 @@ const ShiftsPage: React.FC = () => {
   }, []);
 
   const handleStartShift = async (shiftId: string) => {
-    console.log('Начало смены:', shiftId);
-    await loadShifts();
+    try {
+      await shiftApi.updateShiftStatus(shiftId, {
+        active: 'Активна',
+        notActive: '',
+      });
+      setShifts((prevShifts) =>
+        prevShifts.map((shift) =>
+          shift.id === shiftId
+            ? {
+                ...shift,
+                status: { ...shift.status, active: 'Активна', notActive: '' },
+              }
+            : shift,
+        ),
+      );
+    } catch (err) {
+      console.error('Ошибка при старте смены:', err);
+      setError('Не удалось начать смену');
+    }
   };
 
   const handleStopShift = async (shiftId: string) => {
-    console.log('Окончание смены:', shiftId);
-    await loadShifts();
+    try {
+      await shiftApi.updateShiftStatus(shiftId, {
+        notActive: 'Не активна',
+        active: '',
+      });
+      setShifts((prevShifts) =>
+        prevShifts.map((shift) =>
+          shift.id === shiftId
+            ? {
+                ...shift,
+                status: {
+                  ...shift.status,
+                  notActive: 'Не активна',
+                  active: '',
+                },
+              }
+            : shift,
+        ),
+      );
+    } catch (err) {
+      console.error('Ошибка при остановке смены:', err);
+      setError('Не удалось остановить смену');
+    }
   };
 
-  const handleAddSuccess = () => {
+  const handleAddSuccess = (newShift: Shift) => {
+    setShifts((prev) => [...prev, newShift]);
     setIsAddModalOpen(false);
-    loadShifts();
+  };
+
+  const handleEditSuccess = (updatedShift: Shift) => {
+    setShifts((prev) =>
+      prev.map((s) => (s.id === updatedShift.id ? updatedShift : s)),
+    );
   };
 
   if (loading) return <CircularProgress />;
@@ -68,6 +112,7 @@ const ShiftsPage: React.FC = () => {
         shifts={shifts}
         onStartShift={handleStartShift}
         onStopShift={handleStopShift}
+        onEditSuccess={handleEditSuccess}
       />
 
       <AddShiftModal
