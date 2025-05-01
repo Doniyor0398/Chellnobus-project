@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { shiftApi } from '../api/shiftApi';
 import { Shift, ShiftFormValues } from '../types/ShiftTypes';
 
-export const useEditShift = (shift: Shift, onSuccess: () => void) => {
+export const useEditShift = (
+  shift: Shift,
+  onSuccess: (updatedShift: Shift) => void,
+) => {
   const [formData, setFormData] = useState<ShiftFormValues>({
     ...shift,
     driver:
@@ -35,8 +38,8 @@ export const useEditShift = (shift: Shift, onSuccess: () => void) => {
     setError(null);
 
     try {
-      await shiftApi.updateShift(shift.id, formData);
-      onSuccess();
+      const updatedShift = await shiftApi.updateShift(shift.id, formData);
+      onSuccess(updatedShift);
     } catch (err) {
       setError('Ошибка при обновлении смены');
       console.error(err);

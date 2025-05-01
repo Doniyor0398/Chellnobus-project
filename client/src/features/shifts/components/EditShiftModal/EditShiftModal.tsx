@@ -23,10 +23,18 @@ interface Props {
   onSuccess: (updatedShift: Shift) => void;
 }
 
-const EditShiftModal: React.FC<Props> = ({ shift, open, onClose }) => {
+const EditShiftModal: React.FC<Props> = ({
+  shift,
+  open,
+  onClose,
+  onSuccess,
+}) => {
   const { formData, loading, error, handleChange, handleSubmit } = useEditShift(
     shift,
-    onClose,
+    (updatedShift) => {
+      onSuccess(updatedShift); // <-- обновим ShiftsPage
+      onClose(); // и закроем модалку
+    },
   );
 
   return (
