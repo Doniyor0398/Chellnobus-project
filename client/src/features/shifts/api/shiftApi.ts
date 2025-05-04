@@ -51,7 +51,7 @@ class ShiftApiService {
     shiftData: ShiftFormValues,
   ): Promise<Shift> {
     await axios.patch(`${API_BASE_URL}/shifts/${shiftId}.json`, shiftData);
-    return { id: shiftId, ...shiftData }; // Возвращаем обновлённую смену
+    return { id: shiftId, ...shiftData }; 
   }
 
   private normalizeDriver(driver: unknown): Driver {
