@@ -4,10 +4,10 @@ import { Order, OrderFormValues } from '../types/OrderTypes';
 
 export const useAddOrder = (onSuccess: (newOrder: Order) => void) => {
   const [formData, setFormData] = useState<OrderFormValues>({
-    date: '',
-    time: '',
-    status: 'Свободен',
-    type: '',
+    date: new Date().toISOString().split('T')[0],
+    time: '12:00',
+    status: 'Работает',
+    type: 'Доставка',
     vehicle: '',
     driver: '',
     from: '',

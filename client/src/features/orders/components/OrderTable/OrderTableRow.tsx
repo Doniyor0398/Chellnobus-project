@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Chip, Typography } from '@mui/material';
+import { TableRow, TableCell, Chip, Typography, Tooltip } from '@mui/material';
 import { Order } from '../../types/OrderTypes';
 
 interface Props {
@@ -16,14 +16,8 @@ const statusColor = (status: string) => {
   }
 };
 
-/**
- * Форматирует данные водителя в строку
- */
 const formatDriver = (
-  driver:
-    | string
-    | { firstName?: string; lastName?: string; phone?: string }
-    | undefined,
+  driver: string | { firstName?: string; lastName?: string } | undefined,
 ): string => {
   if (!driver) return 'Не указан';
   if (typeof driver === 'string') return driver;
@@ -32,48 +26,65 @@ const formatDriver = (
   );
 };
 
+const compactCellStyle = {
+  padding: '8px 12px',
+  whiteSpace: 'nowrap',
+  maxWidth: '200px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+};
+
 const OrderTableRow: React.FC<Props> = ({ order }) => {
   return (
     <TableRow hover>
-      <TableCell>
-        <Typography variant="body2">
-          {order.date}, {order.time}
+      <TableCell
+        sx={{
+          ...compactCellStyle,
+          position: 'sticky',
+          left: 0,
+          backgroundColor: 'background.paper',
+          zIndex: 1,
+          minWidth: '180px',
+        }}
+      >
+        <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
+          {order.date}
+          <br />
+          {order.time}
         </Typography>
       </TableCell>
-      <TableCell>
+      <TableCell sx={compactCellStyle}>
         <Chip
           label={order.status}
           color={statusColor(order.status)}
           size="small"
         />
       </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.type}</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body2" component="div">
+      <TableCell sx={compactCellStyle}>{order.type}</TableCell>
+      <TableCell sx={compactCellStyle}>
+        <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
           {order.vehicle}
           <br />
           {formatDriver(order.driver)}
         </Typography>
       </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.from}</Typography>
+      <TableCell sx={compactCellStyle}>{order.from}</TableCell>
+      <TableCell sx={compactCellStyle}>{order.to}</TableCell>
+      <TableCell sx={compactCellStyle}>{order.sender}</TableCell>
+      <TableCell sx={compactCellStyle}>{order.receiver}</TableCell>
+      <TableCell sx={compactCellStyle}>
+        <Tooltip title={order.cargo || 'Нет данных'}>
+          <Typography sx={{ ...compactCellStyle, display: 'inline-block' }}>
+            {order.cargo || '-'}
+          </Typography>
+        </Tooltip>
       </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.to}</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.sender}</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.receiver}</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.cargo}</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body2">{order.comment}</Typography>
+      <TableCell sx={compactCellStyle}>
+        <Tooltip title={order.comment || 'Нет комментария'}>
+          <Typography sx={{ ...compactCellStyle, display: 'inline-block' }}>
+            {order.comment || '-'}
+          </Typography>
+        </Tooltip>
       </TableCell>
     </TableRow>
   );

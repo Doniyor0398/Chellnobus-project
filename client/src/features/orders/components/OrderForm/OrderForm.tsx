@@ -133,6 +133,27 @@ const OrderForm: React.FC<OrderFormProps> = ({
           </Grid>
         </Grid>
 
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              label="Отправитель"
+              value={formData.sender}
+              onChange={(e) => onChange('sender', e.target.value)}
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label="Получатель"
+              value={formData.receiver}
+              onChange={(e) => onChange('receiver', e.target.value)}
+              fullWidth
+              required
+            />
+          </Grid>
+        </Grid>
+
         <TextField
           label="Груз"
           value={formData.cargo}
