@@ -48,9 +48,7 @@ const OrderTableRow: React.FC<Props> = ({ order }) => {
         }}
       >
         <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
-          {order.date}
-          <br />
-          {order.time}
+          {order.date}, {order.time}
         </Typography>
       </TableCell>
       <TableCell sx={compactCellStyle}>
