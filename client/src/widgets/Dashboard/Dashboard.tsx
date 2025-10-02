@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
       case '/':
         return 'Водители';
       case '/shifts':
-        return 'Смена';
+        return 'Смены';
       case '/orders':
         return 'Заказы';
       case '/users':
@@ -120,7 +120,7 @@ export const Dashboard: React.FC = () => {
             <ListItem disablePadding>
               <ListItemButton component={Link} to="/shifts">
                 <Schedule sx={{ mr: 2 }} />
-                <ListItemText primary="Смена" />
+                <ListItemText primary="Смены" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>

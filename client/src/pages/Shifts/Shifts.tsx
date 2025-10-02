@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import ShiftTable from '../../features/shifts/components/ShiftTable/ShiftTable';
 import { shiftApi } from '../../features/shifts/api/shiftApi';
 import { Shift } from '../../features/shifts/types/ShiftTypes';
-import { CircularProgress, Alert, Button, Stack } from '@mui/material';
+import {
+  CircularProgress,
+  Alert,
+  Button,
+  Stack,
+  Typography,
+  Paper,
+} from '@mui/material';
 import AddShiftModal from '../../features/shifts/components/AddShiftModal/AddShiftModal';
 
 const ShiftsPage: React.FC = () => {
@@ -92,21 +99,26 @@ const ShiftsPage: React.FC = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <h1>Управление сменами</h1>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsAddModalOpen(true)}
+      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
         >
-          Добавить смену
-        </Button>
-      </Stack>
+          <Typography fontWeight="bold" variant="h6">
+            Смены
+          </Typography>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            Добавить смену
+          </Button>
+        </Stack>
+      </Paper>
 
       <ShiftTable
         shifts={shifts}

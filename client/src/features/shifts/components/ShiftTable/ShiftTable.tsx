@@ -41,7 +41,7 @@ const ShiftTable: React.FC<ShiftTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={10} align="center">
-                Нет данных о сменах
+                Нет данных о Сменых
               </TableCell>
             </TableRow>
           )}

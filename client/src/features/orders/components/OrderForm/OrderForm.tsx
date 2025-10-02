@@ -7,6 +7,7 @@ import {
   Chip,
   MenuItem,
   Grid,
+  Box,
 } from '@mui/material';
 import { OrderFormValues } from '../../types/OrderTypes';
 
@@ -95,22 +96,24 @@ const OrderForm: React.FC<OrderFormProps> = ({
             </TextField>
           </Grid>
         </Grid>
+        <Box>
+          <TextField
+            label="Транспортное средство"
+            value={formData.vehicle}
+            onChange={(e) => onChange('vehicle', e.target.value)}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
 
-        <TextField
-          label="Транспортное средство"
-          value={formData.vehicle}
-          onChange={(e) => onChange('vehicle', e.target.value)}
-          fullWidth
-          required
-        />
-
-        <TextField
-          label="Водитель"
-          value={formData.driver}
-          onChange={(e) => onChange('driver', e.target.value)}
-          fullWidth
-          required
-        />
+          <TextField
+            label="Водитель"
+            value={formData.driver}
+            onChange={(e) => onChange('driver', e.target.value)}
+            fullWidth
+            required
+          />
+        </Box>
 
         <Grid container spacing={2}>
           <Grid item xs={6}>

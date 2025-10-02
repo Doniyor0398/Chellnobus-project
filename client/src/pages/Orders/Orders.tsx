@@ -49,7 +49,6 @@ const OrdersPage: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         height: 'calc(100vh - 64px)',
-
         gap: 2,
       }}
     >
@@ -59,7 +58,9 @@ const OrdersPage: React.FC = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h6">Список заказов</Typography>
+          <Typography fontWeight="bold" variant="h6">
+            Заказы
+          </Typography>
           <Button
             variant="contained"
             onClick={() => setIsModalOpen(true)}

@@ -57,6 +57,7 @@ export const Drivers = () => {
       >
         <Typography
           variant="h4"
+          fontWeight="bold"
           component="h1"
           sx={{
             display: 'flex',

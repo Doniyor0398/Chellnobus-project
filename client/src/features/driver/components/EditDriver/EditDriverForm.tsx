@@ -124,7 +124,7 @@ export const EditDriverForm: React.FC<EditDriverFormProps> = ({
           />
 
           <DriverSelect
-            label="Смена"
+            label="Смены"
             value={formData.shift}
             onChange={(e) => onFieldChange('shift', e.target.value)}
             options={shiftOptions}

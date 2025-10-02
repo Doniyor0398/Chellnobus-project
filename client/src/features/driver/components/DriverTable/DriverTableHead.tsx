@@ -11,7 +11,7 @@ const DriverTableHead = () => (
       <TableCell sx={{ ...themeForTableCell, width: '120px' }}>
         График
       </TableCell>
-      <TableCell sx={{ ...themeForTableCell, width: '100px' }}>Смена</TableCell>
+      <TableCell sx={{ ...themeForTableCell, width: '100px' }}>Смены</TableCell>
       <TableCell sx={{ ...themeForTableCell, width: '150px' }}>ТС</TableCell>
       <TableCell sx={{ ...themeForTableCell, width: '120px' }}>
         Госномер
